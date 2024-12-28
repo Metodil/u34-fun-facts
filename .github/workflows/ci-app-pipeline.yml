@@ -68,7 +68,6 @@ jobs:
           cd app/client/code
           python -m unittest app_test.py
 
-
 #  gitleaks-security:
 #    runs-on: ubuntu-latest
 #    needs: lint-unit-tests
