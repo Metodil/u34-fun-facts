@@ -1,0 +1,9 @@
+FROM python:3.12-slim
+
+RUN useradd userapp && apt-get update && apt-get install -y cron && apt-get install -y libpq-dev gcc
+RUN pip3 install --upgrade pip
+COPY --chown=userapp client/code/* /app/
+WORKDIR /app
+RUN pip3 install -r requirements.txt && date > app.dat
+
+CMD [ "python3", "-m" , "flask", "run", "--host=0.0.0.0"]
