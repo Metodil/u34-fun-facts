@@ -1,0 +1,2 @@
+psycopg2-binary
+protobuf==5.29.1

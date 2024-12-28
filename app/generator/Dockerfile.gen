@@ -1,0 +1,9 @@
+FROM python:3.12-slim
+
+RUN useradd userapp && apt-get update && apt-get install -y cron   && apt-get install -y libpq-dev gcc
+RUN pip3 install --upgrade pip
+COPY --chown=userapp generator/code/* /app/
+WORKDIR /app
+RUN pip3 install -r requirements.txt
+
+CMD [ "python", "-u", "/app/app.py"]
