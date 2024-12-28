@@ -1,0 +1,3 @@
+#FROM mariadb
+FROM postgres:14.6
+ADD storage/sql/init.sql /docker-entrypoint-initdb.d/init.sql
