@@ -5,16 +5,13 @@ on:
 #    - cron: '0 0 * * 1,4' # on Monday (1) and Thursday (4)
   push:
     paths:
-      - 'ci-app-pipeline.yml'
+      - '.github/workflows/ci-app-pipeline.yml'
   pull_request:
     types: [opened, reopened]
     branches:
         - 'main'
     paths:
       - 'app/**'
-      - 'Dockerfile'
-      - 'requirements.txt'
-
 env:
   IMAGE_TAG: metodil/u34-fun-facts
 
