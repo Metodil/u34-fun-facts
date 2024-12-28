@@ -6,14 +6,14 @@ on:
   push:
     paths:
       - 'ci-app-pipeline.yml'
-#  pull_request:
-#    types: [opened, reopened]
-#    branches:
-#        - 'main'
-#    paths:
-#      - 'app/**'
-#      - 'Dockerfile'
-#      - 'requirements.txt'
+  pull_request:
+    types: [opened, reopened]
+    branches:
+        - 'main'
+    paths:
+      - 'app/**'
+      - 'Dockerfile'
+      - 'requirements.txt'
 
 env:
   IMAGE_TAG: metodil/u34-fun-facts
