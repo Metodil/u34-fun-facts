@@ -25,4 +25,4 @@ ensuring that the codebase is continuously integrated and fully tested.
 > - Different type of checks: code quality and lint, hardcoded credentials, securety and others
 > - Build Docker images
 > - Upload to registry
-> - [More hire in CI_README](.github/workflows/CI_README.md) with details.
+> - [More hire in CI_README](.github/workflows/CI_APP_README.md) with details.
