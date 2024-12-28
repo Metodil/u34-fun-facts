@@ -3,17 +3,17 @@ run-name: u34 ci-app-pipeline run on ${{ github.event_name }} event
 on:
 #  schedule:
 #    - cron: '0 0 * * 1,4' # on Monday (1) and Thursday (4)
-#  push:
-#    paths:
-#      - 'ci-app-pipeline.yml'
-  pull_request:
-    types: [opened, reopened]
-    branches:
-        - 'main'
+  push:
     paths:
-      - 'app/**'
-      - 'Dockerfile'
-      - 'requirements.txt'
+      - 'ci-app-pipeline.yml'
+#  pull_request:
+#    types: [opened, reopened]
+#    branches:
+#        - 'main'
+#    paths:
+#      - 'app/**'
+#      - 'Dockerfile'
+#      - 'requirements.txt'
 
 env:
   IMAGE_TAG: metodil/u34-fun-facts
