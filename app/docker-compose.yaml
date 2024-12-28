@@ -1,0 +1,42 @@
+services:
+    web:
+        container_name: con-web
+        build:
+            context: .
+            dockerfile: client/Dockerfile.web
+        ports:
+            - 8080:5000
+        networks:
+            - app-network
+        environment:
+            DB_PASS: "${DB_PASS}"
+            DB_HOST: "${DB_HOST}"
+            DB_USER: "${DB_USER}"
+            DB_NAME: "${DB_NAME}"
+        depends_on:
+            - storage
+    storage:
+        container_name: con-storage
+        build:
+            context: .
+            dockerfile: storage/Dockerfile.db
+        ports:
+            - 5432:5432
+        networks:
+            - app-network
+        environment:
+            POSTGRES_PASSWORD: "${DB_ROOT_PASSWORD}"
+    generator:
+        container_name: con-generator
+        build:
+            context: .
+            dockerfile: generator/Dockerfile.gen
+        networks:
+            - app-network
+        environment:
+            DB_PASS: "${DB_PASS}"
+            DB_HOST: "${DB_HOST}"
+            DB_USER: "${DB_USER}"
+            DB_NAME: "${DB_NAME}"
+networks:
+    app-network:
