@@ -20,9 +20,9 @@ The CI workflow is defined in GitHub Actions.\
 It is triggered on PR to a trunk branch in the repository,
 ensuring that the codebase is continuously integrated and fully tested.
 
-> - *Application* is set of three Docker containers. [More hire in APP/README](app/README.md) with details.
+> - *Application* is set of three Docker containers. [More here in APP/README](app/README.md) with details.
 > - Git Action workflow *app-ci-pipeline.yml*
 > - Different type of checks: code quality and lint, hardcoded credentials, securety and others
 > - Build Docker images
 > - Upload to registry
-> - [More hire in CI_README](.github/workflows/CI_APP_README.md) with details.
+> - [More here in CI_APP_README](.github/workflows/CI_APP_README.md) with details.
