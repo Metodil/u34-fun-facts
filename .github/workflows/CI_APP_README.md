@@ -13,14 +13,14 @@ Workflow is created in **.github/workflow/app-ci-pipeline.yaml**
 > - SAST - SonarCloud; Review code smells and security issues - job in workflow  **sonarcloud-security**
 > - SCA - Snyk; review security issues - **integrated** in my github account
 ---
-> - Build a Docker images with matrix strategy. Use Git commit SHA as an Image tag.
+> - Build a Docker images with *matrix strategy*. Use Git commit SHA as an Image tag.
 > - Check image can be runing.
 > - Scan the built image with `Trivy`.
-> - Create artefacts and upload it.
+> - Create *artefacts* and upload it.
 > - Job in workflow  **build-test-images** .
 ---
 > - Get credential from Git Action Secrets(Hashi Vault)
-> - Load images from artifacts with matrix strategy
+> - Load images from *artifacts* with *matrix strategy*
 > - Docker image versioning with Git commit SHA as an Image tag.
-> - Push the built image to my Docker HUB account.
+> - Push the built image to my *Docker hub* account.
 > - Job in workflow  **deploy**
