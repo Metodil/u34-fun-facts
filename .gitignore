@@ -1,5 +1,6 @@
 # environment vars
 env-vars.sh
+kubernetes/app-secrets.yaml
 
 # Local .terraform directories
 **/.terraform/*
