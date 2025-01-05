@@ -43,7 +43,7 @@ spec:
               secretKeyRef:
                 name: secret-fun-facts
                 key: DB_USER
-          image: metodil/u34-fun-facts-client:latest
+          image: metodil/u34-fun-facts-web:9bbf373360006847daba13a3463f2e8b6b6481e7
           name: web
           ports:
             - containerPort: 5000
