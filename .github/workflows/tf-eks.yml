@@ -3,7 +3,7 @@ run-name: u34 CICD-Terraform-EKS run on ${{ github.event_name }} event
 on:
     push:
         paths:
-          - '.github/workflows/terraform-eks.yml'
+          - '.github/workflows/tf-eks.yml'
 #    push:
 #      branches: [main]
 #    pull_request:

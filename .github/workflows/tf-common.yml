@@ -1,13 +1,13 @@
-name: CICD-Terraform-common
+name: CICD-TF-common
 run-name: u34 CICD-Terraform-common run on ${{ github.event_name }} event
 on:
-#    push:
-#        paths:
-#          - '.github/workflows/terraform-common.yml'
     push:
-      branches: [main]
-    pull_request:
-      branches: [main]
+        paths:
+          - '.github/workflows/tf-common.yml'
+#    push:
+#      branches: [main]
+#    pull_request:
+#      branches: [main]
 
 env:
   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}

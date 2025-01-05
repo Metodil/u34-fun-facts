@@ -1,4 +1,4 @@
-name: CICD-Terraform-common-apply
+name: CICD-TF-common-apply
 run-name: u34 CICD-Terraform-common-apply run on ${{ github.event_name }} event
 on:
   workflow_dispatch:
