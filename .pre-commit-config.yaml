@@ -26,3 +26,14 @@ repos:
 #    - id: checkov_diff_container
 #    - id: checkov_secrets
 #    - id: checkov_secrets_container
+-   repo: https://github.com/antonbabenko/pre-commit-terraform
+    rev: v1.96.3 # Get the latest from: https://github.com/antonbabenko/pre-commit-terraform/releases
+    hooks:
+        - id: terraform_fmt
+#          args:
+#            - --args=--recusive
+#        - id: infracost_breakdown
+#          args:
+#            - --args=--path=terraform/aws_common/.
+#          verbose: true # Always show costs
+#        - id: terraform_docs
