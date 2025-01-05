@@ -5,5 +5,3 @@ metadata:
 data:
   DB_HOST: 'con-storage'
   DB_NAME: 'animal_facts'
-  DB_USER: 'root'
-  DB_PASS: 'Pa$$w0rd'

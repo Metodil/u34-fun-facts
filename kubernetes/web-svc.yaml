@@ -13,3 +13,4 @@ spec:
   selector:
     app: FunFacts
     role: web
+  type: LoadBalancer
