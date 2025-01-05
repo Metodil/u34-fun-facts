@@ -2,6 +2,9 @@
 env-vars.sh
 kubernetes/app-secrets.yaml
 
+# Local .infracost directories
+**/.infracost/*
+
 # Local .terraform directories
 **/.terraform/*
 
