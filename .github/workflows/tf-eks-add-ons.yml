@@ -1,0 +1,92 @@
+name: CICD-TF-EKS-add-ons
+run-name: u34 CICD-Terraform-EKS-add-ons run on ${{ github.event_name }} event
+on:
+    push:
+        paths:
+          - '.github/workflows/tf-eks-add-ons.yml'
+#    push:
+#      branches: [main]
+#    pull_request:
+#      branches: [main]
+
+env:
+  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}
+  AWS_REGION: "eu-central-1"
+  TF_ROOT: "terraform/aws_eks_add_ons"
+  GITHUB_NAME: "metodil/u34-fun-facts"
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up AWS CLI
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ env.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ env.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v3.1.1
+
+      - name: Terraform Init
+        id: init
+        run: |
+          cd ${{ env.TF_ROOT }}
+          terraform init
+
+      - name: Format Terraform Code
+        run: |
+          cd ${{ env.TF_ROOT }}
+          terraform fmt -check -diff || exit 0
+
+      - name: Terraform Validate
+        id: validate
+        run: |
+          cd ${{ env.TF_ROOT }}
+          terraform validate
+
+#      - name: Install Checkov with pip
+#        run: pip install checkov
+
+#      - name: Checkov Scan
+#        id: checkov
+#        run: |
+#          cd ${{ env.TF_ROOT }}
+#          checkov -d . || exit 0
+
+      - name: Setup Infracost
+        uses: infracost/actions/setup@v3
+        with:
+          api-key: ${{ secrets.INFRACOST_API_KEY }}
+
+      # Generate Infracost JSON file as the baseline.
+      - name: Generate Infracost cost estimate baseline
+        run: |
+          infracost breakdown --path=${TF_ROOT} \
+                              --format=json \
+                              --out-file=/tmp/infracost-eks-add-ons.json
+
+      - name: Post Infracost comment
+        run: |
+            infracost comment github --path=/tmp/infracost-eks-add-ons.json \
+                                     --repo=${{ env.GITHUB_NAME }} \
+                                     --github-token=${{ secrets.U34_FP_GITHUB_TOKEN }} \
+                                     --behavior=hide-and-new \
+                                     --commit=${{ github.sha }}
+#                                     --pr=${{ github.event.pull_request.number }}
+
+      - name: Terraform Plan
+        id: plan
+        run: |
+          cd ${{ env.TF_ROOT }}
+          terraform plan -out=tfplan-eks-add-ons
+
+      - name: Copy tfplan to the S3 Bucket
+        run: |
+          cd ${{ env.TF_ROOT }}
+          aws s3 cp tfplan-eks-add-ons s3://u34-tfstate/tfplan-eks-add-ons
