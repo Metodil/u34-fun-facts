@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: FunFacts
+    role: web
+  name: web
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: FunFacts
+      role: web
+  template:
+    metadata:
+      labels:
+        app: FunFacts
+        role: web
+    spec:
+      containers:
+        - env:
+          - name: WEB_POD_NAME
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.name
+          - name: DB_HOST
+            valueFrom:
+              configMapKeyRef:
+                name: config-fun-facts-env
+                key: DB_HOST
+          - name: DB_NAME
+            valueFrom:
+              configMapKeyRef:
+                name: config-fun-facts-env
+                key: DB_NAME
+          - name: DB_PASS
+            valueFrom:
+              secretKeyRef:
+                name: secret-fun-facts
+                key: DB_PASS
+          - name: DB_USER
+            valueFrom:
+              secretKeyRef:
+                name: secret-fun-facts
+                key: DB_USER
+          image: metodil/u34-fun-facts-client:latest
+          name: web
+          ports:
+            - containerPort: 5000
+              protocol: TCP
+          resources:
+            limits:
+              memory: "256Mi"  # Maximum memory allowed
+              cpu: "200m"       # Maximum CPU allowed (200 milliCPU)
+            requests:
+              memory: "128Mi"  # Initial memory request
+              cpu: "100m"       # Initial CPU request
+      restartPolicy: Always

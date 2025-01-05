@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: config-fun-facts-env
+data:
+  DB_HOST: 'con-storage'
+  DB_NAME: 'animal_facts'
+  DB_USER: 'root'
+  DB_PASS: 'Pa$$w0rd'

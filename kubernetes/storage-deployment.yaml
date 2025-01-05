@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: FunFacts
+    role: storage
+  name: storage
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: FunFacts
+      role: storage
+  template:
+    metadata:
+      labels:
+        app: FunFacts
+        role: storage
+    spec:
+      containers:
+        - env:
+          - name: POSTGRES_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: secret-fun-facts
+                key: DB_ROOT_PASSWORD
+          image: metodil/u34-fun-facts-storage:latest
+          name: storage
+          ports:
+            - containerPort: 3306
+              protocol: TCP
+          resources:
+            limits:
+              memory: "256Mi"  # Maximum memory allowed
+              cpu: "200m"       # Maximum CPU allowed (200 milliCPU)
+            requests:
+              memory: "128Mi"  # Initial memory request
+              cpu: "100m"       # Initial CPU request
+      restartPolicy: Always
