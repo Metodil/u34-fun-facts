@@ -27,7 +27,7 @@ spec:
           image: metodil/u34-fun-facts-storage:latest
           name: storage
           ports:
-            - containerPort: 3306
+            - containerPort: 5432
               protocol: TCP
           resources:
             limits:
