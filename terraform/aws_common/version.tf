@@ -10,9 +10,9 @@ terraform {
 
 terraform {
   backend "s3" {
-    bucket         = var.bucket-name
-    key            = var.aws_s3_state_common_name
-    region         = var.aws_region
-    dynamodb_table = var.aws_db_lock_state_name
+    bucket         = "u34-tfstate"
+    key            = "common.tfstate"
+    region         = "eu-central-1"
+    dynamodb_table = "u34-lock"
   }
 }
