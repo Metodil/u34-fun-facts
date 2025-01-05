@@ -33,30 +33,31 @@ jobs:
       - name: Set up Terraform
         uses: hashicorp/setup-terraform@v3.1.1
 
-      - name: Install Checkov with pip
-        run: pip install checkov
-
       - name: Terraform Init
         id: init
         run: |
           cd ${{ env.TF_ROOT }}
           terraform init
 
-      - name: Checkov Scan
-        id: checkov
-        run: |
-          cd ${{ env.TF_ROOT }}
-          checkov -d . || exit 0
-
       - name: Format Terraform Code
         run: |
           cd ${{ env.TF_ROOT }}
           terraform fmt -check -diff || exit 0
+
       - name: Terraform Validate
         id: validate
         run: |
           cd ${{ env.TF_ROOT }}
           terraform validate
+
+      - name: Install Checkov with pip
+        run: pip install checkov
+
+      - name: Checkov Scan
+        id: checkov
+        run: |
+          cd ${{ env.TF_ROOT }}
+          checkov -d . || exit 0
 
       - name: Setup Infracost
         uses: infracost/actions/setup@v3
@@ -76,8 +77,8 @@ jobs:
                                      --repo=${{ env.GITHUB_NAME }} \
                                      --github-token=${{ secrets.U34_FP_GITHUB_TOKEN }} \
                                      --behavior=hide-and-new \
-                                     --pr=${{ github.event.pull_request.number }}
-#                                     --commit=${{ github.sha }}
+                                     --commit=${{ github.sha }}
+#                                     --pr=${{ github.event.pull_request.number }}
 
       - name: Terraform Plan
         id: plan
