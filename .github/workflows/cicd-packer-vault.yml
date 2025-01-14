@@ -44,7 +44,7 @@ jobs:
         if: steps.ami_check.outputs.ami_id == 'None'
         run: |
           wget https://releases.hashicorp.com/packer/1.11.2/packer_1.11.2_linux_amd64.zip
-          sudo unzip -o packer_1.10.0_linux_amd64.zip -d /usr/local/bin/
+          sudo unzip -o packer_1.11.2_linux_amd64.zip -d /usr/local/bin/
           cd packer
           packer init u34-aws-vault.pkr.hcl
           packer build u34-aws-vault.pkr.hcl
