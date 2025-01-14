@@ -1,0 +1,111 @@
+name: CICD-Packer-Actions
+
+on:
+  push:
+    paths:
+    - '.github/workflows/cicd-packer-vault.yml'
+#  push:
+#    branches: [main]
+#  pull_request:
+#    branches: [main]
+
+env:
+    AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
+    AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}
+    AWS_REGION: "eu-central-1"
+    TF_ROOT: "terraform/aws_vault"
+    PLAN_NAME: "tfplan-vault"
+    GITHUB_NAME: "metodil/u34-fun-facts"
+
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up AWS CLI
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ env.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ env.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Check for existing AMI
+        id: ami_check
+        run: |
+          ami_id=$(aws ec2 describe-images --filters "Name=name,Values=u34-vault-ami" --query 'Images[0].ImageId' --output text || echo "not_found")
+          echo "Found AMI: $ami_id"
+          echo "::set-output name=ami_id::$ami_id"
+
+      - name: Install Packer if AMI not found and build the required AMI
+        if: steps.ami_check.outputs.ami_id == 'None'
+        run: |
+          wget https://releases.hashicorp.com/packer/1.11.2/packer_1.11.2_linux_amd64.zip
+          sudo unzip -o packer_1.10.0_linux_amd64.zip -d /usr/local/bin/
+          cd packer
+          packer init u34-aws-vault.pkr.hcl
+          packer build u34-aws-vault.pkr.hcl
+
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v1
+
+      - name: Terraform Init
+        id: init
+        run: |
+          cd ${{ env.TF_ROOT }}
+          terraform init
+
+#      - name: Install Checkov with pip
+#        run: pip install checkov
+#
+#      - name: Checkov Scan
+#        id: checkov
+#        run: |
+#          cd ${{ env.TF_ROOT }}
+#          checkov -d . || exit 0
+
+      - name: Format Terraform Code
+        run: |
+          cd ${{ env.TF_ROOT }}
+          terraform fmt -check -diff || exit 0
+
+      - name: Terraform Validate
+        id: validate
+        run: |
+          cd ${{ env.TF_ROOT }}
+          terraform validate
+
+      - name: Setup Infracost
+        uses: infracost/actions/setup@v3
+        with:
+          api-key: ${{ secrets.INFRACOST_API_KEY }}
+
+      # Generate Infracost JSON file as the baseline.
+      - name: Generate Infracost cost estimate baseline
+        run: |
+          infracost breakdown --path=${TF_ROOT} \
+                              --format=json \
+                              --out-file=/tmp/infracost-vault.json
+
+      - name: Post Infracost comment
+        run: |
+            infracost comment github --path=/tmp/infracost-vault.json \
+                                     --repo=${{ env.GITHUB_NAME }} \
+                                     --github-token=${{ secrets.U34_FP_GITHUB_TOKEN }} \
+                                     --behavior=hide-and-new \
+                                     --commit=${{ github.sha }}
+#                                     --pr=${{ github.event.pull_request.number }}
+
+      - name: Terraform Plan
+        id: plan
+        run: |
+          cd ${{ env.TF_ROOT }}
+          terraform plan -out=${{ env.PLAN_NAME }}
+
+      - name: Copy tfplan created S3 Bucket
+        run: |
+          cd ${{ env.TF_ROOT }}
+          aws s3 cp ${{ env.PLAN_NAME }} s3://u34-tfstate/${{ env.PLAN_NAME }}
