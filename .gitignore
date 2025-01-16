@@ -2,6 +2,9 @@
 env-vars.sh
 kubernetes/app-secrets.yaml
 
+# Remove public keys
+*.pem
+
 # Packer
 # Cache objects
 packer_cache/
