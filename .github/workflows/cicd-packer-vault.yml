@@ -105,6 +105,7 @@ jobs:
           cd ${{ env.TF_ROOT }}
           terraform plan -out=${{ env.PLAN_NAME }}
 
+
       - name: Copy tfplan created S3 Bucket
         run: |
           cd ${{ env.TF_ROOT }}
