@@ -1,5 +1,5 @@
-name: CICD-Terraform-vault-destroy
-run-name: u34 CICD-Terraform-vault-destroy run only manual
+name: CICD-Terraform-eks-add-ons-destroy
+run-name: u34 CICD-Terraform-eks-add-ons-destroy run only manual
 on:
   workflow_dispatch:
 env:
@@ -7,8 +7,8 @@ env:
   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}
   AWS_REGION: "eu-central-1"
   TF_S3_NAME: "u34-tfstate"
-  TF_PLAN_NAME: "tfplan-vault-destroy"
-  TF_ROOT: "terraform/aws_vault"
+  TF_PLAN_NAME: "tfplan-eks-add-ons-destroy"
+  TF_ROOT: "terraform/aws_eks_add_ons"
 
 jobs:
   build:
@@ -48,7 +48,7 @@ jobs:
 #          additional-denied-words: ''
 
 
-      - name: Terraform Destroy Vault
+      - name: Terraform Destroy EKS Add-ons
         id: apply
         run: |
           cd ${{ env.TF_ROOT }}

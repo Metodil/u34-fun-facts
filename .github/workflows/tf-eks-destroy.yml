@@ -1,16 +1,13 @@
-name: CICD-TF-EKS-apply
-run-name: u34 CICD-Terraform-EKS-apply run on ${{ github.event_name }} event
+name: CICD-Terraform-eks-destroy
+run-name: u34 CICD-Terraform-eks-destroy run only manual
 on:
   workflow_dispatch:
-#    schedule:
-#      - cron: '0 0 * * *'
-
 env:
   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}
   AWS_REGION: "eu-central-1"
   TF_S3_NAME: "u34-tfstate"
-  TF_PLAN_NAME: "tfplan-eks"
+  TF_PLAN_NAME: "tfplan-eks-destroy"
   TF_ROOT: "terraform/aws_eks"
 
 jobs:
@@ -37,13 +34,23 @@ jobs:
           cd ${{ env.TF_ROOT }}
           terraform init
 
-      - name: Copy tfplan from the S3 Bucket
-        run: |
-          cd ${{ env.TF_ROOT }}
-          aws s3 cp s3://u34-tfstate/tfplan-eks tfplan-eks
+#      - uses: trstringer/manual-approval@v1
+#        with:
+#          secret: ${{ github.TOKEN }}
+#          approvers: metodil
+#          minimum-approvals: 1
+#          issue-title: "Destroy Vault EC2 instance"
+#          issue-body: "Please approve or deny the destroy Vault instance"
+#          exclude-workflow-initiator-as-approver: false
+##          Approval keywords - "approve", "approved", "lgtm", "yes"
+##          Denied keywords - "deny", "denied", "no"
+#          additional-approved-words: ''
+#          additional-denied-words: ''
 
-      - name: Terraform Apply
+
+      - name: Terraform Destroy EKS
         id: apply
         run: |
           cd ${{ env.TF_ROOT }}
-          terraform apply --auto-approve tfplan-eks
+          terraform plan -destroy -out=${{ env.TF_PLAN_NAME }}
+          terraform apply ${{ env.TF_PLAN_NAME }} -auto-approve
