@@ -1,6 +1,9 @@
 ## Workflows structure
 
 ## Applycation workflow
+
+![general setup](../../images/app-workflow-sdlc.jpg)
+
 > - *ci-app-pipeline.yml* [More here in .github/workflows/CI_APP_README](CI_APP_README.md)
 > - Different type of checks: code quality and lint, hardcoded credentials, securety and others
 > - Build Docker images
