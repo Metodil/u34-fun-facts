@@ -42,18 +42,18 @@ jobs:
           cd ${{ env.TF_ROOT }}
           terraform init
 
-      - uses: trstringer/manual-approval@v1
-        with:
-          secret: ${{ github.TOKEN }}
-          approvers: metodil
-          minimum-approvals: 1
-          issue-title: "Destroy Vault EC2 instance"
-          issue-body: "Please approve or deny the destroy Vault instance"
-          exclude-workflow-initiator-as-approver: false
-#          Approval keywords - "approve", "approved", "lgtm", "yes"
-#          Denied keywords - "deny", "denied", "no"
-          additional-approved-words: ''
-          additional-denied-words: ''
+#      - uses: trstringer/manual-approval@v1
+#        with:
+#          secret: ${{ github.TOKEN }}
+#          approvers: metodil
+#          minimum-approvals: 1
+#          issue-title: "Destroy Vault EC2 instance"
+#          issue-body: "Please approve or deny the destroy Vault instance"
+#          exclude-workflow-initiator-as-approver: false
+##          Approval keywords - "approve", "approved", "lgtm", "yes"
+##          Denied keywords - "deny", "denied", "no"
+#          additional-approved-words: ''
+#          additional-denied-words: ''
 
       - name: Copy tfplan from the S3 Bucket
         run: |
