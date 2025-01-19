@@ -55,13 +55,15 @@ jobs:
 #          additional-approved-words: ''
 #          additional-denied-words: ''
 
-      - name: Copy tfplan from the S3 Bucket
-        run: |
-          cd ${{ env.TF_ROOT }}
-          aws s3 cp s3://u34-tfstate/tfplan-vault tfplan-vault
+#      - name: Copy tfplan from the S3 Bucket
+#        run: |
+#          cd ${{ env.TF_ROOT }}
+#          aws s3 cp s3://u34-tfstate/tfplan-vault tfplan-vault
 
+#-auto-approve
       - name: Terraform Apply
         id: apply
         run: |
           cd ${{ env.TF_ROOT }}
-          terraform destroy tfplan-vault
+          terraform plan -destroy -out=tfplan-vault-destroy
+          terraform apply tfplan-vault-destroy -destroy
