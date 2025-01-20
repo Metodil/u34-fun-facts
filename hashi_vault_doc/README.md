@@ -1,4 +1,4 @@
-<img src="../images/vault-hashicorp-logo.png" alt="drawing" width="200"/> Hashi Vault
+<img src="../images/vault-hashicorp-logo.png" alt="drawing" width="300"/>
 
 ## Vault Community Edition and Vault Enterprise.
 
@@ -34,7 +34,7 @@ anything with a resources, it must handover a valid Token. From the
 Token, Vault determines the Policies. All Tokens have a Time To Live
 (TTL)
 
-• Entities
+-   Entities
 
 Entities represent the client within Vault. A specific Entity can be
 authenticated through multiple Auth Methods it is diffrent Entity
