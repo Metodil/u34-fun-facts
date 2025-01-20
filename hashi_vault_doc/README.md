@@ -79,7 +79,7 @@ time the secret existed
 <img src="../images/hash-vault-plugin.png" alt="drawing" width="600"/>
 
 ## Demonstration
-
+### Login to my EC2 instance created with terraform from Packer-Ansible->AWS AMI.
 ## Static secrets
 Using
 ```bash
@@ -89,7 +89,7 @@ vault secrets enable -version=2 -path=secrets kv
 
 # Adding entries secrets
 vault kv put secrets/dev username=user
-vault kv put secrets/dev password=sec_password
+vault kv put secrets/dev password=<password>
 ```
 ## Dynamic AWS IAM users
 Using
@@ -128,7 +128,7 @@ curl \
 ## Dynamic database secrets
 ```bash
 export AWS_POSTGRES_DB_USER=postgres
-export AWS_POSTGRES_DB_PASS='u34_very_secret_password'
+export AWS_POSTGRES_DB_PASS=<password>
 export AWS_POSTGRES_DB_HOST=<DB_HOST>
 
 vault secrets enable database
@@ -150,6 +150,7 @@ vault write database/roles/u34-db-dcr-role \
 
 vault read database/creds/u34-db-dcr-role
 
+# API call
 curl \
     --header "X-Vault-Token: <Vault-Token>" \
     --request GET \
