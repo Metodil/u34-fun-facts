@@ -57,7 +57,6 @@ ensuring that the codebase is continuously integrated and fully tested.
 ### Terms of Use
 
 [MIT License]
-
 Please refer to the 'LICENSE' file in this repo for the specific terms and conditions governing the use of this project.
 
 ## Contributors and Collaborators
