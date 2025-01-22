@@ -49,13 +49,11 @@ ensuring that the codebase is continuously integrated and fully tested.
 > - [More here in hashi_vault_doc/README](hashi_vault_doc/README.md) with details.
 
 ## Future Improvements:
-- Add Route53 DNS Records and SSL/TLS for Hashi Vault and Kubernetes Load Balancer
-- Implement ChatOps with Slack
-- Improve Hashi Vault with Auto Unseal and DynamoDB Backend
+> - Add Route53 DNS Records and SSL/TLS for Hashi Vault and Kubernetes Load Balancer
+> - Implement ChatOps with Slack
+> - Improve Hashi Vault with Auto Unseal and DynamoDB Backend
 
 ## License:
-The 'LICENSE' file in this repository outlines the rules of engagement governing the use of the project's source code and assets. It establishes the terms under which you can embrace and share this work. Kindly respect and honor these terms as you engage with and contribute to this project.
-
 ### Terms of Use
 
 [MIT License]
@@ -64,8 +62,8 @@ Please refer to the 'LICENSE' file in this repo for the specific terms and condi
 
 ## Contributors and Collaborators
 ### Contributors
-- Metodi Lichkov - github: https://github.com/metodil
+> - Metodi Lichkov - github: https://github.com/metodil
 
 ### Collaborators
-- Iliyan Vutoff - github: https://github.com/vutoff
-- Daniel Rankov - github: https://github.com/severel
+> - Iliyan Vutoff - github: https://github.com/vutoff
+> - Daniel Rankov - github: https://github.com/severel
