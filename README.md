@@ -36,10 +36,36 @@ The CI workflow is defined in GitHub Actions.\
 It is triggered on PR to a trunk branch in the repository,
 ensuring that the codebase is continuously integrated and fully tested.
 
-> - [More here in main .github/workflows/README](.github/workflows/README.md) with details.
+> - [More here in .github/workflows/README](.github/workflows/README.md) with details.
 
 ## Building infrastructure (IaC)
 ### Infrastructure in AWS
 > - [More here in main terraform/README](terraform/README.md) with details.
 ### Immutable infrastructures with Packer
-> - [More here in main packer/README](packer/README.md) with details.
+> - [More here in packer/README](packer/README.md) with details.
+
+## Deep dive in Hashi Vault
+### I will present theory and possibilities when using Hashi Vault. Demonstration of several techniques related to AWS and databases.
+> - [More here in hashi_vault_doc/README](hashi_vault_doc/README.md) with details.
+
+## Future Improvements:
+- Add Route53 DNS Records and SSL/TLS for Hashi Vault and Kubernetes Load Balancer
+- Implement ChatOps with Slack
+- Improve Hashi Vault with Auto Unseal and DynamoDB Backend
+
+## License:
+The 'LICENSE' file in this repository outlines the rules of engagement governing the use of the project's source code and assets. It establishes the terms under which you can embrace and share this work. Kindly respect and honor these terms as you engage with and contribute to this project.
+
+### Terms of Use
+
+[MIT License]
+
+Please refer to the 'LICENSE' file in this repo for the specific terms and conditions governing the use of this project.
+
+## Contributors and Collaborators
+### Contributors
+- Metodi Lichkov - github: https://github.com/metodil
+
+### Collaborators
+- Iliyan Vutoff - github: https://github.com/vutoff
+- Daniel Rankov - github: https://github.com/severel
