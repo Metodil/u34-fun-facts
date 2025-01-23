@@ -3,6 +3,7 @@ Create a  pipeline that runs on PR to a trunk branch (i.e. not `main`) and perfo
 I use *parallel runners* and the necessary *dependencies* in jobs.\
 Workflow is created in **.github/workflow/app-ci-pipeline.yaml**
 
+![general setup](../../images/cicd-app.drawio.png)
 
 ***
 > - Check `.editorconfig` - job in workflow **editorconfig**

@@ -38,7 +38,7 @@ The resulting AMI will be available in your AWS account with the specified name 
 
 ## Configuration managment with Ansible
 
-    source file     : packer/instance-config.yaml - Ansible playbook
+    source file     : packer/u34-vault.yml - Ansible playbook
     service file    : packer/init.service.j2 - Hashi Vault init service file
     setup file      : packer/vault.hcl.j2 - Hashi Vault setup file
 
