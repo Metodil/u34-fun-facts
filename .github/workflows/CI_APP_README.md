@@ -1,7 +1,9 @@
-## GitHub Actions CI pipeline
+## GitHub Actions CICD pipeline
 Create a  pipeline that runs on PR to a trunk branch (i.e. not `main`) and performs the following checks on my app.\
 I use *parallel runners* and the necessary *dependencies* in jobs.\
 Workflow is created in **.github/workflow/app-ci-pipeline.yaml**
+
+
 ***
 > - Check `.editorconfig` - job in workflow **editorconfig**
 > - Check makrdown files  - job in workflow **markdown-link-check**

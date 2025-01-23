@@ -46,7 +46,7 @@
         checksum: "{{vault_checksum}}"
       register: vault_download
 
-    - name: "Unzip vault archive"
+    - name: Unzip vault archive
       unarchive:
         src: "{{ vault_download.dest }}"
         dest: /usr/local/bin
@@ -65,7 +65,7 @@
         state: directory
 
 
-    - name: check if install was successful
+    - name: Check if install was successful
       command: vault --version
       register: vault_ver
       failed_when: "'command not found' in vault_ver.stderr"
@@ -77,20 +77,20 @@
         owner: root
         group: root
 
-    - name: config file
+    - name: Copy config file
       template:
         src: vault.hcl.j2
         dest: "{{ vault_config_path }}"
         owner: "{{ vault_user }}"
         group: "{{ vault_group }}"
 
-    - name: vault service
+    - name: Vault service start
       service:
         name: vault.service
         state: started
         enabled: yes
 
-    - name: "pause for 30 seconds"
+    - name: Pause for 30 seconds
       pause:
         seconds: 30
 

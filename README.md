@@ -1,5 +1,8 @@
 # Fun Facts Microservices Application
 A final project used for the following courses **Upskill 34 DevOps**  at **Telerik**:
+## Project diagram
+
+![general setup](images/cicd-main.drawio.png)
 
 ## Project description:
 > - All code is in Source control on GitHub.
@@ -30,9 +33,9 @@ Simple python app with 3 components.
 > - frontend web interface for dispaly data
 > - [More here in app/README](app/README.md)
 
-## Continuous Integration (CI) Components
+## Continuous Integration (CI) and continuous delivery/deployment (CD)  Components
 ***
-The CI workflow is defined in GitHub Actions.\
+The CICD workflow is defined in GitHub Actions.\
 It is triggered on PR to a trunk branch in the repository,
 ensuring that the codebase is continuously integrated and fully tested.
 
@@ -52,6 +55,7 @@ ensuring that the codebase is continuously integrated and fully tested.
 > - Add Route53 DNS Records and SSL/TLS for Hashi Vault and Kubernetes Load Balancer
 > - Implement ChatOps with Slack
 > - Improve Hashi Vault with Auto Unseal and DynamoDB Backend
+> - Reducing the number of VPCs, merging EKS with the Vault instance in one VPC.
 
 ## License:
 ### Terms of Use
