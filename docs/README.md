@@ -1,1 +1,0 @@
-# Documentations about the project
