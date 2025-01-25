@@ -4,10 +4,9 @@ on:
     push:
         paths:
           - '.github/workflows/tf-eks.yml'
-#    push:
-#      branches: [main]
-#    pull_request:
-#      branches: [main]
+          - 'terraform/aws_eks/**'
+    schedule:
+      - cron: '0 0 * * 1,4' # on Monday (1) and Thursday (4)
 
 env:
   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
