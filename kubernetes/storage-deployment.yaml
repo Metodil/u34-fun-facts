@@ -24,7 +24,7 @@ spec:
               secretKeyRef:
                 name: secret-fun-facts
                 key: DB_ROOT_PASSWORD
-          image: metodil/u34-fun-facts-storage:9bbf373360006847daba13a3463f2e8b6b6481e7
+          image: metodil/u34-fun-facts-storage:latest
           name: storage
           ports:
             - containerPort: 5432
