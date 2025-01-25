@@ -30,8 +30,7 @@ resource "helm_release" "argocd" {
     value = "LoadBalancer"
   }
   set {
-    name = "server.service.annotations.service\\.beta\\.kubernetes\\.io/aws-load-balancer-type"
-    #   name  = "service.beta.kubernetes.io/aws-load-balancer-internal: true"
+    name  = "server.service.annotations.service\\.beta\\.kubernetes\\.io/aws-load-balancer-type"
     value = "nlb"
   }
 }
