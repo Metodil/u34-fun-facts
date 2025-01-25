@@ -1,24 +1,31 @@
-name: u34 ci-app-pipeline
-run-name: u34 ci-app-pipeline run on ${{ github.event_name }} event
+name: CICD-App-pipeline
+run-name: u34 CICD-App-pipeline run on ${{ github.event_name }} event
 on:
-#  schedule:
-#    - cron: '0 0 * * 1,4' # on Monday (1) and Thursday (4)
   push:
     paths:
       - '.github/workflows/ci-app-pipeline.yml'
+      - 'app/**'
   pull_request:
-    types: [opened, reopened]
+    types: [opened, reopened, merged]
     branches:
         - 'main'
-    paths:
-      - 'app/**'
 env:
   IMAGE_TAG: metodil/u34-fun-facts
+  SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL_CICD_APP }}
 
 jobs:
 
+  notify-start:
+    name: Notify Start
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send notification to Slack chanel cicd-application-workflow
+        run: |
+          curl -X POST -H 'Content-type: application/json' --data '{"text":"CICD app workflow: started "}' $SLACK_WEBHOOK_URL
+
   editorconfig-check:
     runs-on: ubuntu-latest
+    needs: notify-start
     steps:
       - uses: actions/checkout@v4
       - uses: editorconfig-checker/action-editorconfig-checker@main
@@ -26,12 +33,14 @@ jobs:
 
   markdown-check:
     runs-on: ubuntu-latest
+    needs: notify-start
     steps:
     - uses: actions/checkout@master
     - uses: gaurav-nelson/github-action-markdown-link-check@v1
 
   lint-black-check:
     runs-on: ubuntu-latest
+    needs: notify-start
     steps:
       - uses: actions/checkout@v4
       - uses: psf/black@stable
@@ -41,6 +50,7 @@ jobs:
 
   lint-unit-tests:
     runs-on: ubuntu-latest
+    needs: notify-start
     steps:
       - name: Check out code
         uses: actions/checkout@v4
@@ -64,9 +74,19 @@ jobs:
           cd app/client/code
           python -m unittest app_test.py
 
-  gitleaks-security:
+  notify-checks:
+    name: Notify Checks Finished
     runs-on: ubuntu-latest
     needs: [ editorconfig-check, markdown-check, lint-black-check, lint-unit-tests ]
+    steps:
+      - name: Send notification to Slack chanel cicd-application-workflow
+        run: |
+          curl -X POST -H 'Content-type: application/json' --data '{"text":"CICD app workflow: checks finished"}' $SLACK_WEBHOOK_URL
+
+
+  gitleaks-security:
+    runs-on: ubuntu-latest
+    needs: notify-checks
     steps:
       - uses: actions/checkout@v4
         with:
@@ -77,7 +97,7 @@ jobs:
 
   trivy-security:
     runs-on: ubuntu-latest
-    needs: [ editorconfig-check, markdown-check, lint-black-check, lint-unit-tests ]
+    needs: notify-checks
     steps:
       - uses: actions/checkout@v4
       - name: Run Trivy vulnerability scanner in repo mode
@@ -96,7 +116,7 @@ jobs:
 
 ##  snyk-security:
 ##    runs-on: ubuntu-latest
-#     needs: [ editorconfig-check, markdown-check, lint-black-check, lint-unit-tests ]
+#     needs: notify-checks
 ##    steps:
 ##      - uses: actions/checkout@v4 #actions/checkout@master
 ##      - name: Run Snyk to check for vulnerabilities
@@ -111,8 +131,8 @@ jobs:
 ##        with:
 ##          sarif_file: snyk.sarif
   sonarcloud-security:
-    runs-on: ubuntu-latest
-    needs: [ editorconfig-check, markdown-check, lint-black-check, lint-unit-tests ]
+    runs-on: ubuntu-checks
+    needs: notify-checks
     steps:
     - uses: actions/checkout@v4
       with:
@@ -123,10 +143,19 @@ jobs:
       env:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
+  notify-security:
+    name: Notify Security Finished
+    runs-on: ubuntu-latest
+    needs: [ gitleaks-security,  trivy-security, sonarcloud-security ]
+    steps:
+      - name: Send notification to Slack chanel cicd-application-workflow
+        run: |
+          curl -X POST -H 'Content-type: application/json' --data '{"text":"CICD app workflow: security finished"}' $SLACK_WEBHOOK_URL
+
   build-test-images:
     name: Build images and test them
     runs-on: ubuntu-latest
-    needs: [ gitleaks-security,  trivy-security, sonarcloud-security ]
+    needs: notify-security
     strategy:
       matrix:
         include:
@@ -165,6 +194,14 @@ jobs:
           retention-days: 0 # 1 days to keep artifact
           path: /tmp/artifacts/docker-${{ matrix.name }}-image.tar
 
+  notify-build-test:
+    name: Notify build-test Finished
+    runs-on: ubuntu-latest
+    needs: build-test-images
+    steps:
+      - name: Send notification to Slack chanel cicd-application-workflow
+        run: |
+          curl -X POST -H 'Content-type: application/json' --data '{"text":"CICD app workflow: build and test images finished"}' $SLACK_WEBHOOK_URL
 
   deploy:
     name: Get credentials and push to Dockerhub
@@ -179,13 +216,13 @@ jobs:
           - name: "db"
             tag: "storage"
     if: ${{ !cancelled() && !failure() }}
-    needs: [ build-test-images ]
+    needs: [ notify-build-test ]
     steps:
 #      - name: Import Secrets from Hashi vault
 #        id: import-secrets
 #        uses: hashicorp/vault-action@v3
 #        with:
-#          url: https://vault.elcomp68.com:8200
+#          url: https://vault.######.com:8200
 #          token: ${{ secrets.HV_U34_TOKEN }}
 #          caCertificate: ${{ secrets.VAULT_CA_CERT }}
 #          secrets: |
@@ -208,3 +245,12 @@ jobs:
           docker load -i /tmp/docker-${{ matrix.name }}-image.tar
           docker tag ${{ matrix.name }}:${{ github.sha }} ${{ env.IMAGE_TAG }}-${{ matrix.tag }}:${{ github.sha }}
           docker push ${{ env.IMAGE_TAG }}-${{ matrix.tag }}:${{ github.sha }}
+
+  notify-deploy-finished:
+    name: Notify deploy-finished
+    runs-on: ubuntu-latest
+    needs: deploy
+    steps:
+      - name: Send notification to Slack chanel cicd-application-workflow
+        run: |
+          curl -X POST -H 'Content-type: application/json' --data '{"text":"CICD app workflow: Deploy to dockerhub and workflow is finished"}' $SLACK_WEBHOOK_URL

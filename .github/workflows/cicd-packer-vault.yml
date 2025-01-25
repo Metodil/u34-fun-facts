@@ -1,5 +1,5 @@
 name: CICD-Packer-Actions
-
+run-name: u34 CICD-Packer-Actions run on ${{ github.event_name }} event
 on:
   push:
     paths:
