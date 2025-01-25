@@ -94,9 +94,9 @@ jobs:
 
       - name: Post Infracost comment
         run: |
-          infracost comment github --path=/tmp/infracost-common-slack.json \
-                                   --format slack-message \
-                                   --out-file /tmp/infracost-common-slack-mess.json
+          infracost output  --path=/tmp/infracost-common-slack.json \
+                            --format slack-message \
+                            --out-file /tmp/infracost-common-slack-mess.json
 
       - name: cURL to send a Slack message via a webhook
         run: |
