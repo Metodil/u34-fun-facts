@@ -254,3 +254,43 @@ jobs:
       - name: Send notification to Slack chanel cicd-application-workflow
         run: |
           curl -X POST -H 'Content-type: application/json' --data '{"text":"CICD app workflow: Deploy to dockerhub and workflow is finished"}' $SLACK_WEBHOOK_URL
+
+
+  update-kustomization:
+    name: Update Kustomize with new image tag
+    runs-on: ubuntu-latest
+    needs: notify-deploy-finished
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Prevent endless loop
+        run: |
+          git log -1 --pretty=%B | grep "Update kustomization.yaml" && exit 0 || echo "Proceeding..."
+
+      - name: Update Kustomize Image
+        run: |
+          TAG=$(git rev-parse HEAD)  # Full SHA
+          echo "Using commit SHA: $TAG"
+          cd kubernetes
+          kustomize edit set image metodil/u34-fun-facts-generator=metodil/u34-fun-facts-generator:$TAG
+          kustomize edit set image metodil/u34-fun-facts-storage=metodil/u34-fun-facts-storage:$TAG
+          kustomize edit set image metodil/u34-fun-facts-web=metodil/u34-fun-facts-web:$TAG
+
+      - name: Commit and Push Changes
+        run: |
+          git config --global user.name 'GitHub Actions'
+          git config --global user.email 'actions@github.com'
+          git add kubernetes/kustomization.yaml
+          git commit -m "Update kustomization.yaml with new image tag $TAG"
+          git push
+
+  notify-kustomization:
+    name: Notify deploy-finished
+    runs-on: ubuntu-latest
+    needs: update-kustomization
+    steps:
+      - name: Send notification to Slack for kustomization update
+        run: |
+          TAG=$(git rev-parse HEAD)
+          curl -X POST -H 'Content-type: application/json' --data '{"text":"CICD app workflow: Update Kustomize with new image tag: $TAG"}' $SLACK_WEBHOOK_URL
