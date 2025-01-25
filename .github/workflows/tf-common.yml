@@ -57,14 +57,14 @@ jobs:
         run: |
           curl -X POST -H 'Content-type: application/json' --data '{"text":"CICD-TF-common: checks is finished "}' $SLACK_WEBHOOK_URL
 
-#      - name: Install Checkov with pip
-#        run: pip install checkov
-#
-#      - name: Checkov Scan
-#        id: checkov
-#        run: |
-#          cd ${{ env.TF_ROOT }}
-#          checkov -d . || exit 0
+      - name: Install Checkov with pip
+        run: pip install checkov
+
+      - name: Checkov Scan
+        id: checkov
+        run: |
+          cd ${{ env.TF_ROOT }}
+          checkov -d . || exit 0
 
       - name: Security notification
         run: |
@@ -119,7 +119,7 @@ jobs:
 
       - name: Terraform Plan notification
         run: |
-          curl -X POST -H 'Content-type: application/json' --data '{"text":"CICD-TF-common: Plan is complite "}' $SLACK_WEBHOOK_URL
+          curl -X POST -H 'Content-type: application/json' --data '{"text":"CICD-TF-common: Plan is completed "}' $SLACK_WEBHOOK_URL
           #file=./tfplan-common
           #if [ -e "$file" ]; then
           #    echo "Plan exists"
