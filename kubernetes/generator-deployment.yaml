@@ -39,7 +39,7 @@ spec:
               secretKeyRef:
                 name: secret-fun-facts
                 key: DB_USER
-          image: metodil/u34-fun-facts-generator:latest
+          image: metodil/u34-fun-facts-generator
           name: con-generator
           resources:
             limits:
