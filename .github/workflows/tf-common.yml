@@ -101,33 +101,29 @@ jobs:
 
       - name: cURL to send a Slack message via a webhook
         run: |
-          curl -X POST -H "Content-type: application/json" --data @${{ env.INFRACOST_SLACK_MESSAGE }} ${{ secrets.SLACK_WEBHOOK_URL_CICD_APP }}
+          curl -X POST -H "Content-type: application/json" --data @${{ env.INFRACOST_SLACK_MESSAGE }} $SLACK_WEBHOOK_URL
           #cost_change=$(cat $INFRACOST_OUTPUT | jq -r "(.diffTotalMonthlyCost // 0) | tonumber")
           #if [ "$cost_change" = "0" ]; then
           #  echo "Not posting to Slack since cost change is zero"
-          #  curl -X POST -H "Content-type: application/json" --data '{"text":"CICD-TF-common: Infracost - cost change is zero."}' ${{ secrets.SLACK_WEBHOOK_URL_CICD_APP }}
+          #  curl -X POST -H "Content-type: application/json" --data '{"text":"CICD-TF-common: Infracost - cost change is zero."}' $SLACK_WEBHOOK_URL
           #  exit 0
           #fi
-          #curl -X POST -H "Content-type: application/json" -d @${{ env.INFRACOST_SLACK_MESSAGE }} ${{ secrets.SLACK_WEBHOOK_URL_CICD_APP }}
+          #curl -X POST -H "Content-type: application/json" -d @${{ env.INFRACOST_SLACK_MESSAGE }} $SLACK_WEBHOOK_URL
 
 
       - name: Terraform Plan
         id: plan
         run: |
           cd ${{ env.TF_ROOT }}
-          terraform plan -out=tfplan-common
+          terraform plan -out=tfplan-common -detailed-exitcode
 
       - name: Terraform Plan notification
         run: |
-          curl -X POST -H 'Content-type: application/json' --data '{"text":"CICD-TF-common: Plan is completed "}' $SLACK_WEBHOOK_URL
-          #file=./tfplan-common
-          #if [ -e "$file" ]; then
-          #    echo "Plan exists"
-          #    curl -X POST -H 'Content-type: application/json' --data @tfplan-common $SLACK_WEBHOOK_URL
-          #else
-          #    echo "Plan does not exist"
-          #    curl -X POST -H 'Content-type: application/json' --data '{"text":"CICD-TF-common: No changes. Your infrastructure matches the configuration. "}' $SLACK_WEBHOOK_URL
-          #fi
+          if grep -q "No changes. Your infrastructure matches the configuration." tfplan-common; then
+            curl -X POST -H 'Content-type: application/json' --data '{"text":"CICD-TF-common: No changes. Your infrastructure matches the configuration. "}' $SLACK_WEBHOOK_URL
+          else
+            curl -X POST -H 'Content-type: application/json' --data @tfplan-common $SLACK_WEBHOOK_URL
+          fi
 
       - name: Copy tfplan to the S3 Bucket
         run: |
