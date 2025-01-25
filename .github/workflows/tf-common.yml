@@ -95,7 +95,7 @@ jobs:
       - name: Post Infracost comment
         run: |
           touch ${{ env.INFRACOST_SLACK_MESSAGE }}
-          infracost output  --path=/tmp/infracost-common-slack.json \
+          infracost output  --path=/tmp/infracost-common.json \
                             --format slack-message \
                             --out-file ${{ env.INFRACOST_SLACK_MESSAGE }}
 
