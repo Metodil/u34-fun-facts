@@ -17,10 +17,10 @@ locals {
       # EKS variables
       eks_managed_node_groups = {
         generalworkload-v4 = {
-          min_size       = 1
+          min_size       = 2
           max_size       = 3
-          desired_size   = 1
-          instance_types = ["t2.small"] #m5a.xlarge
+          desired_size   = 2
+          instance_types = ["t2.midium"] #m5a.xlarge
           disk_size      = 30
           ebs_optimized  = true
           iam_role_additional_policies = {

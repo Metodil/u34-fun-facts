@@ -10,7 +10,7 @@ variable "cluster_name" {
 }
 
 variable "instance_type" {
-  default     = "t3.large"
+  default     = "t3.midium"
   description = "default instance type"
 }
 
