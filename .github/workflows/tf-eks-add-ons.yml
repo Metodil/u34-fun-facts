@@ -1,12 +1,20 @@
 name: CICD-TF-EKS-add-ons
 run-name: u34 CICD-Terraform-EKS-add-ons run on ${{ github.event_name }} event
 on:
-    push:
-        paths:
-          - '.github/workflows/tf-eks-add-ons.yml'
-          - 'terraform/aws_eks_add_ons/**'
-    schedule:
-      - cron: '0 0 * * 1,4' # on Monday (1) and Thursday (4)
+#  push:
+#      paths:
+#        - '.github/workflows/tf-eks-add-ons.yml'
+#        - 'terraform/aws_eks_add_ons/**'
+  pull_request:
+    types:
+      - opened
+      - closed
+    branches:
+      - 'main'
+    paths:
+      - 'terraform/aws_eks_add_ons/**'
+  schedule:
+    - cron: '0 0 * * 1,4' # on Monday (1) and Thursday (4)
 
 env:
   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}

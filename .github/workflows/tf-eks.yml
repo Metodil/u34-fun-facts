@@ -1,12 +1,20 @@
 name: CICD-TF-EKS
 run-name: u34 CICD-Terraform-EKS run on ${{ github.event_name }} event
 on:
-    push:
-        paths:
-          - '.github/workflows/tf-eks.yml'
-          - 'terraform/aws_eks/**'
-    schedule:
-      - cron: '0 0 * * 1,4' # on Monday (1) and Thursday (4)
+#  push:
+#      paths:
+#        - '.github/workflows/tf-eks.yml'
+#        - 'terraform/aws_eks/**'
+  pull_request:
+    types:
+      - opened
+      - closed
+    branches:
+      - 'main'
+    paths:
+      - 'terraform/aws_eks/**'
+  schedule:
+    - cron: '0 0 * * 1,4' # on Monday (1) and Thursday (4)
 
 env:
   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
@@ -14,11 +22,18 @@ env:
   AWS_REGION: "eu-central-1"
   TF_ROOT: "terraform/aws_eks"
   GITHUB_NAME: "metodil/u34-fun-facts"
+  SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL_TF_INFRA_AWS }}
+  INFRACOST_SLACK_MESSAGE: "/tmp/infracost-common-slack-message.json"
+
 jobs:
   build:
     name: Build
     runs-on: ubuntu-latest
     steps:
+      - name: Start notification CICD-Terraform-EKS
+        run: |
+          curl -X POST -H 'Content-type: application/json' --data '{"text":"CICD-Terraform-EKS: started "}' $SLACK_WEBHOOK_URL
+
       - name: Checkout
         uses: actions/checkout@v4
 
@@ -49,6 +64,11 @@ jobs:
           cd ${{ env.TF_ROOT }}
           terraform validate
 
+      - name: Checks notification
+        run: |
+          curl -X POST -H 'Content-type: application/json' --data '{"text":"CICD-Terraform-EKS: checks is finished "}' $SLACK_WEBHOOK_URL
+
+
 #      - name: Install Checkov with pip
 #        run: pip install checkov
 
@@ -57,6 +77,11 @@ jobs:
 #        run: |
 #          cd ${{ env.TF_ROOT }}
 #          checkov -d . || exit 0
+
+      - name: Security notification
+        run: |
+          curl -X POST -H 'Content-type: application/json' --data '{"text":"CICD-Terraform-EKS: Security is finished "}' $SLACK_WEBHOOK_URL
+
 
       - name: Setup Infracost
         uses: infracost/actions/setup@v3
@@ -79,13 +104,42 @@ jobs:
                                      --commit=${{ github.sha }}
 #                                     --pr=${{ github.event.pull_request.number }}
 
+      - name: Post Infracost comment
+        run: |
+          touch ${{ env.INFRACOST_SLACK_MESSAGE }}
+          infracost output  --path=/tmp/infracost-common.json \
+                          --format slack-message \
+                          --out-file ${{ env.INFRACOST_SLACK_MESSAGE }}
+
+      - name: cURL to send a Slack message via a webhook
+        run: |
+          curl -X POST -H "Content-type: application/json" --data @${{ env.INFRACOST_SLACK_MESSAGE }} $SLACK_WEBHOOK_URL
+          #cost_change=$(cat $INFRACOST_OUTPUT | jq -r "(.diffTotalMonthlyCost // 0) | tonumber")
+          #if [ "$cost_change" = "0" ]; then
+          #  echo "Not posting to Slack since cost change is zero"
+          #  curl -X POST -H "Content-type: application/json" --data '{"text":"CICD-TF-common: Infracost - cost change is zero."}' $SLACK_WEBHOOK_URL
+          #  exit 0
+          #fi
+          #curl -X POST -H "Content-type: application/json" -d @${{ env.INFRACOST_SLACK_MESSAGE }} $SLACK_WEBHOOK_URL
+
+
+
       - name: Terraform Plan
         id: plan
         run: |
           cd ${{ env.TF_ROOT }}
           terraform plan -out=tfplan-eks
 
+      - name: Terraform Plan notification
+        run: |
+          curl -X POST -H 'Content-type: application/json' --data '{"text":"CICD-Terraform-EKS: Terraform Plan is finished. "}' $SLACK_WEBHOOK_URL
+
+
       - name: Copy tfplan to the S3 Bucket
         run: |
           cd ${{ env.TF_ROOT }}
           aws s3 cp tfplan-eks s3://u34-tfstate/tfplan-eks
+
+      - name: Finish notification
+        run: |
+          curl -X POST -H 'Content-type: application/json' --data '{"text":"CICD-Terraform-EKS: Copy tfplan to the S3 Bucket and finished "}' $SLACK_WEBHOOK_URL
