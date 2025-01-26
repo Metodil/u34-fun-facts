@@ -3,10 +3,10 @@ run-name: u34 CICD-App-pipeline run on ${{ github.event_name }} event
 on:
   push:
     paths:
-      - '.github/workflows/cicd-app.yml'
+#      - '.github/workflows/cicd-app.yml'
       - 'app/**'
   pull_request:
-    types: [opened, reopened, merged]
+    types: [opened, reopened]
     branches:
         - 'main'
 env:
