@@ -6,7 +6,6 @@ module "dev_cluster" {
   default_tags       = local.default_tags
   eks_access_entries = local.eks_access_entries
 }
-
 #module "staging_cluster" {
 #  source        = "./cluster"
 #  cluster_name  = "staging"
