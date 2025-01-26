@@ -1,14 +1,14 @@
 name: CICD-App-pipeline
 run-name: u34 CICD-App-pipeline run on ${{ github.event_name }} event
 on:
-  push:
-    paths:
+#  push:
+#    paths:
 #      - '.github/workflows/cicd-app.yml'
-      - 'app/**'
+#      - 'app/**'
   pull_request:
-    types: [opened, reopened]
+    types: [ merged ]
     branches:
-        - 'main'
+      - 'main'
 env:
   IMAGE_TAG: metodil/u34-fun-facts
   SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL_CICD_APP }}
