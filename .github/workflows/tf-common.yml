@@ -32,6 +32,7 @@ jobs:
       - name: Start notification CICD-TF-common
         run: |
           curl -X POST -H 'Content-type: application/json' --data '{"text":"CICD-TF-common: started "}' $SLACK_WEBHOOK_URL
+
       - name: Checkout
         uses: actions/checkout@v4
 
@@ -61,6 +62,7 @@ jobs:
         run: |
           cd ${{ env.TF_ROOT }}
           terraform validate
+
       - name: Checks notification
         run: |
           curl -X POST -H 'Content-type: application/json' --data '{"text":"CICD-TF-common: checks is finished "}' $SLACK_WEBHOOK_URL
