@@ -292,5 +292,4 @@ jobs:
     steps:
       - name: Send notification to Slack for kustomization update
         run: |
-          TAG=$(git rev-parse HEAD)
-          curl -X POST -H 'Content-type: application/json' --data '{"text":"CICD app workflow: Update Kustomize with new image tag: $TAG"}' $SLACK_WEBHOOK_URL
+          curl -X POST -H 'Content-type: application/json' --data '{"text":"CICD app workflow: Update Kustomize with new image tag: ${{ github.sha }}"}' $SLACK_WEBHOOK_URL

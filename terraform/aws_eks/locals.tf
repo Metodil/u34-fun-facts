@@ -20,7 +20,7 @@ locals {
           min_size       = 2
           max_size       = 3
           desired_size   = 2
-          instance_types = ["t2.midium"] #m5a.xlarge
+          instance_types = ["t3.midium"] #m5a.xlarge
           disk_size      = 30
           ebs_optimized  = true
           iam_role_additional_policies = {
