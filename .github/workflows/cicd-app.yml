@@ -6,9 +6,10 @@ on:
 #      - '.github/workflows/cicd-app.yml'
 #      - 'app/**'
   pull_request:
-    types: [ merged ]
     branches:
       - 'main'
+    paths:
+      - 'app/**'
 env:
   IMAGE_TAG: metodil/u34-fun-facts
   SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL_CICD_APP }}
@@ -269,6 +270,7 @@ jobs:
           git log -1 --pretty=%B | grep "Update kustomization.yaml" && exit 0 || echo "Proceeding..."
 
       - name: Update Kustomize Image
+        if: github.event_name == 'pull_request' && github.event.action == 'closed'
         run: |
           TAG=$(git rev-parse HEAD)  # Full SHA
           echo "Using commit SHA: $TAG"
@@ -278,6 +280,7 @@ jobs:
           kustomize edit set image metodil/u34-fun-facts-web=metodil/u34-fun-facts-web:$TAG
 
       - name: Commit and Push Changes
+        if: github.event_name == 'pull_request' && github.event.action == 'closed'
         run: |
           git config --global user.name 'GitHub Actions'
           git config --global user.email 'actions@github.com'
@@ -291,5 +294,6 @@ jobs:
     needs: update-kustomization
     steps:
       - name: Send notification to Slack for kustomization update
+        if: github.event_name == 'pull_request' && github.event.action == 'closed'
         run: |
           curl -X POST -H 'Content-type: application/json' --data '{"text":"CICD app workflow: Update Kustomize with new image tag: ${{ github.sha }}"}' $SLACK_WEBHOOK_URL
