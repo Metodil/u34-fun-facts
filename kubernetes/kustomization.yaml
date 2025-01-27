@@ -10,10 +10,10 @@ resources:
 images:
 - name: metodil/u34-fun-facts-generator
   newName: metodil/u34-fun-facts-generator
-  newTag: 7a73a246561e331b118b657bb55e7e306101264e
+  newTag: db72a7bcbba0b388116cece2363e64c250a586cb
 - name: metodil/u34-fun-facts-storage
   newName: metodil/u34-fun-facts-storage
-  newTag: 7a73a246561e331b118b657bb55e7e306101264e
+  newTag: db72a7bcbba0b388116cece2363e64c250a586cb
 - name: metodil/u34-fun-facts-web
   newName: metodil/u34-fun-facts-web
-  newTag: 7a73a246561e331b118b657bb55e7e306101264e
+  newTag: db72a7bcbba0b388116cece2363e64c250a586cb
