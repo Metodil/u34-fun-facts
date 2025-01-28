@@ -53,4 +53,4 @@ jobs:
         run: |
           cd ${{ env.TF_ROOT }}
           terraform plan -destroy -out=${{ env.TF_PLAN_NAME }}
-          terraform apply ${{ env.TF_PLAN_NAME }} -auto-approve
+          terraform apply ${{ env.TF_PLAN_NAME }}
