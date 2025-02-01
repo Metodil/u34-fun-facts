@@ -32,7 +32,7 @@ jobs:
       app-changes: ${{ steps.filter.outputs.app-changes }}
       workflow-changes: ${{ steps.filter.outputs.workflow-changes }}
     steps:
-    # For pull requests it's not necessary to checkout the code
+    - uses: actions/checkout@v4
     - uses: dorny/paths-filter@v2
       id: filter
       with:
