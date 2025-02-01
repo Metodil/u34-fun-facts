@@ -33,7 +33,6 @@ jobs:
       workflow-changes: ${{ steps.filter.outputs.workflow-changes }}
     steps:
     # For pull requests it's not necessary to checkout the code
-    - uses: actions/checkout@v4
     - uses: dorny/paths-filter@v2
       id: filter
       with:
@@ -146,7 +145,7 @@ jobs:
         with:
           args: --sarif-file-output=snyk.sarif
       - name: Upload result to GitHub Code Scanning
-        uses: github/codeql-action/upload-sarif@v2
+        uses: github/codeql-action/upload-sarif@v3
         with:
           sarif_file: snyk.sarif
   sonarcloud-security:
@@ -165,7 +164,7 @@ jobs:
   notify-security:
     name: Notify Security Finished
     runs-on: ubuntu-latest
-    needs: [ gitleaks-security,  trivy-security, sonarcloud-security ]
+    needs: [ gitleaks-security,  trivy-security, sonarcloud-security, snyk-security ]
     steps:
       - name: Send notification to Slack chanel cicd-application-workflow
         run: |
@@ -223,6 +222,8 @@ jobs:
           curl -X POST -H 'Content-type: application/json' --data '{"text":"CICD app workflow: build and test images finished"}' $SLACK_WEBHOOK_URL
 
   deploy:
+#   if change in app folder
+    if: ${{ needs.changes.outputs.app-changes == 'true' }}
     name: Get credentials and push to Dockerhub
     runs-on: ubuntu-latest
     strategy:
@@ -234,7 +235,6 @@ jobs:
             tag: "generator"
           - name: "db"
             tag: "storage"
-    if: ${{ !cancelled() && !failure() }}
     needs: [ notify-build-test ]
     steps:
 #      - name: Import Secrets from Hashi vault
@@ -266,6 +266,8 @@ jobs:
           docker push ${{ env.IMAGE_TAG }}-${{ matrix.tag }}:${{ github.sha }}
 
   notify-deploy-finished:
+#   if change in app folder
+    if: ${{ needs.changes.outputs.app-changes == 'true' }}
     name: Notify deploy-finished
     runs-on: ubuntu-latest
     needs: deploy
