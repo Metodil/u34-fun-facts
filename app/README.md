@@ -17,5 +17,4 @@ docker compose up -d
 The result would be something like this:
 
 ![sample result](../images/result-of-app.png)
-
 ***
