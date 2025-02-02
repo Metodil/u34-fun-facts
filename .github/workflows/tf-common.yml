@@ -1,20 +1,18 @@
 name: CICD-TF-common
 run-name: u34 CICD-Terraform-common run on ${{ github.event_name }} event
 on:
-#  push:
-#      paths:
-#        - '.github/workflows/tf-common.yml'
-#        - 'terraform/aws_common/**'
-  pull_request:
-    types:
-      - opened
-      - closed
+#  pull_request:
+#    types:
+#      - opened
+#      - closed
+  push:
     branches:
       - 'main'
     paths:
       - 'terraform/aws_common/**'
-  schedule:
-    - cron: '0 0 * * 1,4' # on Monday (1) and Thursday (4)
+#      - '.github/workflows/tf-common.yml'
+#  schedule:
+#    - cron: '0 0 * * 1,4' # on Monday (1) and Thursday (4)
 env:
   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}
@@ -85,7 +83,6 @@ jobs:
         with:
           api-key: ${{ secrets.INFRACOST_API_KEY }}
 
-      # Generate Infracost JSON file as the baseline.
       - name: Generate Infracost cost estimate baseline
         run: |
           infracost breakdown --path=${TF_ROOT} \
@@ -112,37 +109,28 @@ jobs:
       - name: cURL to send a Slack message via a webhook
         run: |
           curl -X POST -H "Content-type: application/json" --data @${{ env.INFRACOST_SLACK_MESSAGE }} $SLACK_WEBHOOK_URL
-          #cost_change=$(cat $INFRACOST_OUTPUT | jq -r "(.diffTotalMonthlyCost // 0) | tonumber")
-          #if [ "$cost_change" = "0" ]; then
-          #  echo "Not posting to Slack since cost change is zero"
-          #  curl -X POST -H "Content-type: application/json" --data '{"text":"CICD-TF-common: Infracost - cost change is zero."}' $SLACK_WEBHOOK_URL
-          #  exit 0
-          #fi
-          #curl -X POST -H "Content-type: application/json" -d @${{ env.INFRACOST_SLACK_MESSAGE }} $SLACK_WEBHOOK_URL
-
 
       - name: Terraform Plan
         id: plan
         run: |
           cd ${{ env.TF_ROOT }}
           terraform plan -out=tfplan-common -detailed-exitcode
-          ls -als
+          echo "TF_EXIT_CODE=$?" >> $GITHUB_ENV
 
       - name: Terraform Plan notification
         run: |
-          curl -X POST -H 'Content-type: application/json' --data '{"text":"CICD-TF-common: Terraform Plan is finished. "}' $SLACK_WEBHOOK_URL
-          #cd ${{ env.TF_ROOT }}
-          #if grep -q "No changes. Your infrastructure matches the configuration." ./tfplan-common; then
-          #  curl -X POST -H 'Content-type: application/json' --data '{"text":"CICD-TF-common: No changes. Your infrastructure matches the configuration. "}' $SLACK_WEBHOOK_URL
-          #else
-          #  curl -X POST -H 'Content-type: application/json' --data @tfplan-common $SLACK_WEBHOOK_URL
-          #fi
+          if [ "$TF_EXIT_CODE" -eq 0 ]; then
+            echo "✅ No changes detected."
+            curl -X POST -H 'Content-type: application/json' --data '{"text":"CICD-TF-common: ✅ No changes detected. Your infrastructure matches the configuration. "}' $SLACK_WEBHOOK_URL
+          elif [ "$TF_EXIT_CODE" -eq 2 ]; then
+            echo "⚠️ Changes detected in Terraform plan."
+            curl -X POST -H 'Content-type: application/json' --data '{"text":"CICD-TF-common: ⚠️ Changes detected in Terraform plan. Running aplly. "}' $SLACK_WEBHOOK_URL
+          fi
 
-      - name: Copy tfplan to the S3 Bucket
+      - name: Terraform Apply if changes detected
         run: |
-          cd ${{ env.TF_ROOT }}
-          aws s3 cp tfplan-common s3://u34-tfstate/tfplan-common
-
-      - name: Finish notification
-        run: |
-          curl -X POST -H 'Content-type: application/json' --data '{"text":"CICD-TF-common: Copy tfplan to the S3 Bucket and finished "}' $SLACK_WEBHOOK_URL
+          if [ "$TF_EXIT_CODE" -eq 2 ]; then
+            cd ${{ env.TF_ROOT }}
+            terraform apply --auto-approve tfplan-common
+            curl -X POST -H 'Content-type: application/json' --data '{"text":"CICD-TF-common: Terraform apply finsh. "}' $SLACK_WEBHOOK_URL
+          fi
