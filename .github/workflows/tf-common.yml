@@ -129,8 +129,8 @@ jobs:
 
       - name: Terraform Apply if changes detected
         run: |
-          if [ "$TF_EXIT_CODE" -eq 2 ]; then
+          #if [ "$TF_EXIT_CODE" -eq 2 ]; then
             cd ${{ env.TF_ROOT }}
-            # terraform apply --auto-approve tfplan-common
+            terraform apply --auto-approve tfplan-common
             curl -X POST -H 'Content-type: application/json' --data '{"text":"CICD-TF-common: Terraform apply finsh. "}' $SLACK_WEBHOOK_URL
-          fi
+          #fi
