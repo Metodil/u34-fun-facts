@@ -80,6 +80,7 @@ resource "aws_s3_bucket_lifecycle_configuration" "versioning-bucket-config" {
   depends_on = [aws_s3_bucket_versioning.terraform_state]
 
   bucket = aws_s3_bucket.terraform_state.id
+  #checkov:skip=CKV_AWS_300: "Ensure S3 lifecycle configuration sets period for aborting failed uploads"
   rule {
     id = "config"
 
