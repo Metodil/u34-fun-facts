@@ -6,8 +6,8 @@ on:
 #      - opened
 #      - closed
   push:
-    branches:
-      - 'main'
+#    branches:
+#      - 'main'
     paths:
       - 'terraform/aws_common/**'
 #      - '.github/workflows/tf-common.yml'
