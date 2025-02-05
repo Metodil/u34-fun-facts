@@ -46,7 +46,7 @@ jobs:
         run: |
           ami_id=$(aws ec2 describe-images --filters "Name=name,Values=u34-vault-ami" --query 'Images[0].ImageId' --output text || echo "not_found")
           echo "Found AMI: $ami_id"
-          run: echo "ami_id=$ami_id" >> $GITHUB_OUTPUT
+          echo "ami_id=$ami_id" >> $GITHUB_OUTPUT
 
 
       - name: Install Packer if AMI not found and build the required AMI
