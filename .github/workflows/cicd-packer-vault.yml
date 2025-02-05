@@ -1,20 +1,21 @@
 name: CICD-Packer-Actions
 run-name: u34 CICD-Packer-Actions run on ${{ github.event_name }} event
 on:
-#  push:
+  push:
 #    paths:
 #    - '.github/workflows/cicd-packer-vault.yml'
 #    - 'packer/**'
-  pull_request:
-    types:
-      - opened
-      - closed
-    branches:
-      - 'main'
+#  pull_request:
+#    types:
+#      - opened
+#      - closed
+#    branches:
+#      - 'main'
     paths:
       - 'terraform/aws_vault/**'
-  schedule:
-    - cron: '0 0 * * 1,4' # on Monday (1) and Thursday (4)
+      - '.github/workflows/cicd-packer-vault.yml'
+#  schedule:
+#    - cron: '0 0 * * 1,4' # on Monday (1) and Thursday (4)
 
 env:
     AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
@@ -110,10 +111,12 @@ jobs:
         id: plan
         run: |
           cd ${{ env.TF_ROOT }}
-          terraform plan -out=${{ env.PLAN_NAME }}
+          terraform plan -out=${{ env.PLAN_NAME }} -detailed-exitcode
+          echo "TF_EXIT_CODE=$?" >> $GITHUB_ENV
 
-
-      - name: Copy tfplan created S3 Bucket
+      - name: Terraform Apply if changes detected
         run: |
-          cd ${{ env.TF_ROOT }}
-          aws s3 cp ${{ env.PLAN_NAME }} s3://u34-tfstate/${{ env.PLAN_NAME }}
+          #if [ "$TF_EXIT_CODE" -eq 2 ]; then
+            cd ${{ env.TF_ROOT }}
+            terraform apply --auto-approve tfplan-vault
+          #fi

@@ -1,6 +1,15 @@
-module "vault-vpc" {
-  source   = "./vpc"
-  vpc_name = "u34-vault"
+data "aws_vpc" "selected" {
+  filter {
+    name   = "tag:Name"
+    values = [var.vpc_name]
+  }
+}
+
+data "aws_subnet" "selected" {
+  filter {
+    name   = "tag:Name"
+    values = [var.vpc_subnet_name]
+  }
 }
 
 # Get id from my packer created Immutable Ubuntu AMI
@@ -9,21 +18,21 @@ data "aws_ami" "ubuntu" {
   most_recent = true
   filter {
     name   = "name"
-    values = ["u34-vault-ami"]
+    values = [var.ami_instance_name]
   }
 }
 
 resource "aws_instance" "vault" {
   ami           = data.aws_ami.ubuntu.id
   instance_type = var.instance_type
-  subnet_id     = module.vault-vpc.public_subnets[0]
+  subnet_id     = data.aws_subnet.selected.id
   security_groups = [
     aws_security_group.ingress-ssh.id,
     aws_security_group.vpc-vault.id
   ]
   key_name = var.instance_key_name
   tags = {
-    Name = "u34-vault-instance"
+    Name = var.new_instance_name
   }
 
 }
@@ -48,7 +57,7 @@ resource "aws_key_pair" "generated" {
 
 resource "aws_security_group" "ingress-ssh" {
   name   = "allow-ssh"
-  vpc_id = module.vault-vpc.vpc_id
+  vpc_id = data.aws_subnet.selected.id
   ingress {
     cidr_blocks = [
       "0.0.0.0/0"
@@ -67,7 +76,7 @@ resource "aws_security_group" "ingress-ssh" {
 
 resource "aws_security_group" "vpc-vault" {
   name        = "vpc-vault"
-  vpc_id      = module.vault-vpc.vpc_id
+  vpc_id      = data.aws_subnet.selected.id
   description = "Web Traffic"
   ingress {
     description = "Allow Port 80"

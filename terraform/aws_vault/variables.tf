@@ -34,10 +34,32 @@ variable "env_name" {
   description = "Environment name"
 }
 
+variable "vpc_name" {
+  default     = "k8s-vpc"
+  description = "default value of vpc"
+}
+
+variable "vpc_subnet_name" {
+  default     = "k8s-vpc-public-eu-central-1c"
+  description = "default value of vpc subnet name"
+}
+
+
 variable "instance_type" {
   description = "AWS Instance Type (EC2 Type)"
   default     = "t2.micro"
 }
+
+variable "ami_instance_name" {
+  description = "AWS Instance Vault Name"
+  default     = "u34-vault-ami"
+}
+
+variable "new_instance_name" {
+  description = "New Instance Vault Name"
+  default     = "u34-vault-instance"
+}
+
 
 variable "instance_key_name" {
   description = "AWS Instance Key Name"

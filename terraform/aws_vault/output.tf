@@ -1,7 +1,7 @@
 #outputs.tf
-output "module_vpc_output" {
-  value       = module.vault-vpc
-  description = "The output of the created vault vpc."
+output "vault_server" {
+  description = "Vault Server"
+  value       = aws_instance.vault.id
 }
 
 output "public_url" {
