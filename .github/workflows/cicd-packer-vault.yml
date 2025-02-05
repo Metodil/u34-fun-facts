@@ -112,7 +112,7 @@ jobs:
         id: plan
         run: |
           cd ${{ env.TF_ROOT }}
-          terraform plan -out=${{ env.PLAN_NAME }} -detailed-exitcode
+          terraform plan -out=tfplan-vault -detailed-exitcode
           echo "TF_EXIT_CODE=$?" >> $GITHUB_ENV
 
       - name: Terraform Apply if changes detected
