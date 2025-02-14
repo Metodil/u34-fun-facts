@@ -57,7 +57,7 @@ resource "aws_key_pair" "generated" {
 
 resource "aws_security_group" "ingress-ssh" {
   name   = "allow-ssh"
-  vpc_id = data.aws_subnet.selected.id
+  vpc_id = data.aws_vpc.selected.id
   ingress {
     cidr_blocks = [
       "0.0.0.0/0"
@@ -76,7 +76,7 @@ resource "aws_security_group" "ingress-ssh" {
 
 resource "aws_security_group" "vpc-vault" {
   name        = "vpc-vault"
-  vpc_id      = data.aws_subnet.selected.id
+  vpc_id      = data.aws_vpc.selected.id
   description = "Web Traffic"
   ingress {
     description = "Allow Port 80"
