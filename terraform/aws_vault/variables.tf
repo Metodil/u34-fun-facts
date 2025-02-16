@@ -66,6 +66,11 @@ variable "instance_key_name" {
   default     = "vault-aws-key"
 }
 
+variable "dynamoTable" {
+  description = "AWS Dynamodb Table Name for Vault"
+  default     = "u34-vault-dynamodb-table"
+}
+
 variable "environments" {
   type        = any
   default     = "dev"

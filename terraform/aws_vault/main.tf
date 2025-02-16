@@ -128,3 +128,26 @@ resource "aws_security_group" "vpc-vault" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 }
+
+resource "aws_dynamodb_table" "dynamodb-table" {
+  name           = var.dynamoTable
+  read_capacity  = 1
+  write_capacity = 1
+  hash_key       = "Path"
+  range_key      = "Key"
+
+  attribute {
+    name = "Path"
+    type = "S"
+  }
+
+  attribute {
+    name = "Key"
+    type = "S"
+  }
+
+  tags = {
+    Name        = "vault-dynamodb-table"
+    Environment = "prod"
+  }
+}
