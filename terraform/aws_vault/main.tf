@@ -31,9 +31,15 @@ resource "aws_instance" "vault" {
     aws_security_group.vpc-vault.id
   ]
   key_name = var.instance_key_name
+
+  user_data = data.template_file.userdata.rendered
+
   tags = {
     Name = var.new_instance_name
   }
+
+  # The vault instance needs the unseal key and dynamodb table in place before it launches.
+  depends_on = [aws_dynamodb_table.vault-table] # aws_kms_key.vault-unseal-key
 
 }
 
@@ -126,28 +132,5 @@ resource "aws_security_group" "vpc-vault" {
     to_port     = 0
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
-  }
-}
-
-resource "aws_dynamodb_table" "dynamodb-table" {
-  name           = var.dynamoTable
-  read_capacity  = 1
-  write_capacity = 1
-  hash_key       = "Path"
-  range_key      = "Key"
-
-  attribute {
-    name = "Path"
-    type = "S"
-  }
-
-  attribute {
-    name = "Key"
-    type = "S"
-  }
-
-  tags = {
-    Name        = "vault-dynamodb-table"
-    Environment = "prod"
   }
 }

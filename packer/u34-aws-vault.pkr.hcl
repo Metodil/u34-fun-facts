@@ -39,7 +39,7 @@ build {
   ]
   provisioner "ansible" {
     playbook_file = "u34-vault.yml"
-#    extra_arguments = [ "-vvvv" ] # or more vvv
+#    extra_arguments = [ "-vvvv" ] # or less vvv
   }
 
 }

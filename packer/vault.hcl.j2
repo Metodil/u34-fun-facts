@@ -1,14 +1,35 @@
 api_addr = "http://127.0.0.1:8200"
 cluster_addr = "http://127.0.0.1:8201"
+#api_addr = "https://vault.u34-vault.link:8200",
+#cluster_addr = "https://vault.u34-vault.link:8201"
 
 ui=true
+disable_mlock = true
 
-#storage "s3" {
-#  access_key = "ACCESS_KEY_HERE"
-#  secret_key = "SECRET_KEY_HERE"
-#  bucket     = "vault-secret"
-#  region	 = "eu-central-1"
-#}
+default_lease_ttl = "168h"
+max_lease_ttl = "720h"
+
+log_file = "/var/log/vault.log"
+log_rotate_duration = "24h"
+log_rotate_max_files = 30
+
+storage "s3" {
+  region	 = "${region}"
+  bucket     = "${bucket-name}"
+}
+
+storage "dynamodb" {
+    region          = "${region}"
+    table           = "${dynamodb-table}"
+    read_capacity   = 3
+    write_capacity  = 3
+}
+
+seal "awskms" {
+  region     = "${region}" # awskms
+  kms_key_id = "${unseal-key}" # awskms
+# "arn:aws:kms:eu-central-1:482167452852:key/7a7c0692-7c64-463c-8319-e4adf66b7379"
+} # awskms
 
 backend "file" {
   path = "/opt/vault/data"
@@ -17,4 +38,6 @@ backend "file" {
 listener "tcp" {
 	address     = "0.0.0.0:8200"
 	tls_disable = 1
+#    tls_cert_file = "/opt/vault/tls/server.crt"
+#    tls_key_file  = "/opt/vault/tls/server.key"
 }

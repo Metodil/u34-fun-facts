@@ -14,6 +14,7 @@
     vault_config_path: "/etc/vault.hcl"
     vault_storage_path: "/opt/vault/data"
     vault_tls_path: "/opt/vault/tls"
+    vault_log_file: "/var/log/vault.log"
 
   tasks:
     - name: Creating vault user group
@@ -74,6 +75,15 @@
         mode: "0755"
         state: directory
 
+    - name: Create log file
+      become: true
+      ansible.builtin.file:
+        path: "{{ vault_log_file }}"
+        owner: vault
+        group: vault
+        mode: "0755"
+        state: touch
+
     - name: Check if install was successful
       command: vault --version
       register: vault_ver
@@ -99,9 +109,9 @@
         state: started
         enabled: yes
 
-    - name: Pause for 30 seconds
+    - name: Pause for 10 seconds
       pause:
-        seconds: 30
+        seconds: 10
 
     - name: Vault init
       register: r_vault_init

@@ -60,15 +60,50 @@ variable "new_instance_name" {
   default     = "u34-vault-instance"
 }
 
-
 variable "instance_key_name" {
   description = "AWS Instance Key Name"
   default     = "vault-aws-key"
 }
 
-variable "dynamoTable" {
+variable "dynamodb_table" {
   description = "AWS Dynamodb Table Name for Vault"
   default     = "u34-vault-dynamodb-table"
+}
+
+variable "dynamo-read-write" {
+  description = "Read / Write value"
+  default     = 1
+}
+
+variable "bucket_name" {
+  description = "Bucket to upload any required files"
+  type        = string
+  default     = "u34-vault-conf-bucket"
+}
+
+variable "vault-root-token" {
+  description = "Name of the secrets manager secret to save the vault root token to"
+  default     = "vault-root-token"
+}
+
+variable "vault-unseal-key" {
+  description = "Name of the secrets manager secret to save the vault unseal key to"
+  default     = "vault-unseal-key"
+}
+
+variable "instance-role" {
+  description = "The instance role"
+  default     = "vault-role"
+}
+
+variable "instance-role-policy" {
+  description = "The policy"
+  default     = "vault-role-policy"
+}
+
+variable "instance-profile" {
+  description = "The profile"
+  default     = "vault-instance-profile"
 }
 
 variable "environments" {
