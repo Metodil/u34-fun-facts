@@ -32,7 +32,7 @@ resource "aws_instance" "vault" {
   ]
   key_name = var.instance_key_name
 
-  user_data = data.template_file.userdata.rendered
+  #  user_data = data.template_file.userdata.rendered
 
   tags = {
     Name = var.new_instance_name

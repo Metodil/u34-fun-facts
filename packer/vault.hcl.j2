@@ -13,23 +13,23 @@ log_file = "/var/log/vault.log"
 log_rotate_duration = "24h"
 log_rotate_max_files = 30
 
-storage "s3" {
-  region	 = "${region}"
-  bucket     = "${bucket-name}"
-}
+#storage "s3" {
+#  region	 = "${region}"
+#  bucket     = "${bucket-name}"
+#}
 
-storage "dynamodb" {
-    region          = "${region}"
-    table           = "${dynamodb-table}"
-    read_capacity   = 3
-    write_capacity  = 3
-}
+#storage "dynamodb" {
+#    region          = "${region}" # dynamodb
+#    table           = "${dynamodb-table}" # dynamodb
+#    read_capacity   = 3 # dynamodb
+#    write_capacity  = 3 # dynamodb
+#}
 
-seal "awskms" {
-  region     = "${region}" # awskms
-  kms_key_id = "${unseal-key}" # awskms
+#seal "awskms" {
+#  region     = "${region}" # awskms
+#  kms_key_id = "${unseal-key}" # awskms
 # "arn:aws:kms:eu-central-1:482167452852:key/7a7c0692-7c64-463c-8319-e4adf66b7379"
-} # awskms
+#} # awskms
 
 backend "file" {
   path = "/opt/vault/data"
