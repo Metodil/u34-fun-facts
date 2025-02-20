@@ -75,7 +75,7 @@ variable "dynamo-read-write" {
   default     = 1
 }
 
-variable "bucket_name" {
+variable "bucket_vault_name" {
   description = "Bucket to upload any required files"
   type        = string
   default     = "u34-vault-conf-bucket"

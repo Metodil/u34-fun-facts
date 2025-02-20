@@ -22,6 +22,12 @@ data "aws_ami" "ubuntu" {
   }
 }
 
+data "aws_caller_identity" "current" {}
+
+locals {
+  account_id = data.aws_caller_identity.current.account_id
+}
+
 resource "aws_instance" "vault" {
   ami           = data.aws_ami.ubuntu.id
   instance_type = var.instance_type
