@@ -8,7 +8,7 @@
     vault_addr: "http://127.0.0.1:8200"
     vault_version: "1.18.2"
     vault_checksum: "sha256:a448c8b6839d76ec54fa320d3a558ff0e5ef0c3d27ea78c88ace333461d7264b"
-    vault_install_prerequisites: ['unzip' , 'awscli' , 'curl' , 'jq' , 'libcap2-bin']
+    vault_install_prerequisites: ['unzip' , 'awscli' , 'curl' , 'jq' , 'libcap2-bin' , 'certbot', 'mc']
     vault_user: "vault"
     vault_group: "vault"
     vault_config_path: "/etc/vault.hcl"
@@ -109,50 +109,50 @@
         state: started
         enabled: yes
 
-    - name: Pause for 10 seconds
-      pause:
-        seconds: 10
+#    - name: Pause for 10 seconds
+#      pause:
+#        seconds: 10
 
-    - name: Vault init
-      register: r_vault_init
-      environment:
-        VAULT_ADDR: "http://127.0.0.1:8200"
-      ansible.builtin.command:
-        cmd: vault operator init -format json
-#       -address="http://127.0.0.1:8200" -key-shares=5 -key-threshold=3
-
-    - name: Vault init data
-      ansible.builtin.set_fact:
-        vault_init_data: "{{ r_vault_init.stdout | from_json }}"
-
-    - name: Save vault data
-      become: true
-      ansible.builtin.copy:
-        content: "{{ vault_init_data | to_nice_json(indent=2) }}"
-        dest: "{{ vault_storage_path }}/init_data.json"
-
-    - name: Vault unseal
-      loop: "{{ vault_init_data.unseal_keys_b64[:3] }}"
-      environment:
-        VAULT_ADDR: "http://127.0.0.1:8200"
-      ansible.builtin.command:
-        cmd: "vault operator unseal '{{ item }}'"
-
-    - name: Vault unseal
-      loop: "{{ vault_init_data.unseal_keys_b64[:3] }}"
-      ansible.builtin.debug:
-        msg: "vault operator unseal '{{ item }}'"
-
-    - name: Vault status
-      register: r_vault_status
-      environment:
-        VAULT_ADDR: "http://127.0.0.1:8200"
-      ansible.builtin.command:
-        cmd: "vault status -format json"
-
-    - name: Vault status report
-      ansible.builtin.debug:
-        msg: "{{ r_vault_status.stdout | from_json }}"
+#    - name: Vault init
+#      register: r_vault_init
+#      environment:
+#        VAULT_ADDR: "http://127.0.0.1:8200"
+#      ansible.builtin.command:
+#        cmd: vault operator init -format json
+##       -address="http://127.0.0.1:8200" -key-shares=5 -key-threshold=3
+#
+#    - name: Vault init data
+#      ansible.builtin.set_fact:
+#        vault_init_data: "{{ r_vault_init.stdout | from_json }}"
+#
+#    - name: Save vault data
+#      become: true
+#      ansible.builtin.copy:
+#        content: "{{ vault_init_data | to_nice_json(indent=2) }}"
+#        dest: "{{ vault_storage_path }}/init_data.json"
+#
+#    - name: Vault unseal
+#      loop: "{{ vault_init_data.unseal_keys_b64[:3] }}"
+#      environment:
+#        VAULT_ADDR: "http://127.0.0.1:8200"
+#      ansible.builtin.command:
+#        cmd: "vault operator unseal '{{ item }}'"
+#
+#    - name: Vault unseal
+#      loop: "{{ vault_init_data.unseal_keys_b64[:3] }}"
+#      ansible.builtin.debug:
+#        msg: "vault operator unseal '{{ item }}'"
+#
+#    - name: Vault status
+#      register: r_vault_status
+#      environment:
+#        VAULT_ADDR: "http://127.0.0.1:8200"
+#      ansible.builtin.command:
+#        cmd: "vault status -format json"
+#
+#    - name: Vault status report
+#      ansible.builtin.debug:
+#        msg: "{{ r_vault_status.stdout | from_json }}"
 
 #    - name: Break for testing
 #      ansible.builtin.fail:

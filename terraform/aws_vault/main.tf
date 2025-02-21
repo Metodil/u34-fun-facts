@@ -1,32 +1,3 @@
-data "aws_vpc" "selected" {
-  filter {
-    name   = "tag:Name"
-    values = [var.vpc_name]
-  }
-}
-
-data "aws_subnet" "selected" {
-  filter {
-    name   = "tag:Name"
-    values = [var.vpc_subnet_name]
-  }
-}
-
-# Get id from my packer created Immutable Ubuntu AMI
-data "aws_ami" "ubuntu" {
-  owners      = ["self"]
-  most_recent = true
-  filter {
-    name   = "name"
-    values = [var.ami_instance_name]
-  }
-}
-
-data "aws_caller_identity" "current" {}
-
-locals {
-  account_id = data.aws_caller_identity.current.account_id
-}
 
 resource "aws_instance" "vault" {
   ami           = data.aws_ami.ubuntu.id
@@ -38,7 +9,7 @@ resource "aws_instance" "vault" {
   ]
   key_name = var.instance_key_name
 
-  #  user_data = data.template_file.userdata.rendered
+  user_data = data.template_file.userdata.rendered
 
   tags = {
     Name = var.new_instance_name

@@ -81,6 +81,12 @@ variable "bucket_vault_name" {
   default     = "u34-vault-conf-bucket"
 }
 
+variable "vault_fqdn" {
+  description = "FQDN of vault instace for tls"
+  type        = string
+  default     = "vault.u34-vault.link"
+}
+
 variable "vault-root-token" {
   description = "Name of the secrets manager secret to save the vault root token to"
   default     = "vault-root-token"

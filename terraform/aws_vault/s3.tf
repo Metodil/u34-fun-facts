@@ -1,10 +1,10 @@
 # This is the bucket where anything required by the userdata will be uploaded to.
 # The userdata will then pull these objects down as required.
 resource "aws_s3_bucket" "vault_config_bucket" {
-  bucket = var.bucket_name
+  bucket = var.bucket_vault_name
 
   tags = {
-    Name = var.bucket_name
+    Name = var.bucket_vault_name
   }
 }
 

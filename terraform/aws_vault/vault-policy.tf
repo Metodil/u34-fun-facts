@@ -101,7 +101,7 @@ resource "aws_iam_role_policy" "vault-kms-unseal" {
   policy = data.aws_iam_policy_document.vault-kms-unseal.json
 }
 
-#resource "aws_iam_instance_profile" "vault-kms-unseal" {
-#  name = var.instance-profile
-#  role = aws_iam_role.vault-kms-unseal.name
-#}
+resource "aws_iam_instance_profile" "vault-kms-unseal" {
+  name = var.instance-profile
+  role = aws_iam_role.vault-kms-unseal.name
+}

@@ -1,8 +1,3 @@
-api_addr = "http://127.0.0.1:8200"
-cluster_addr = "http://127.0.0.1:8201"
-#api_addr = "https://vault.u34-vault.link:8200",
-#cluster_addr = "https://vault.u34-vault.link:8201"
-
 ui=true
 disable_mlock = true
 
@@ -12,28 +7,6 @@ max_lease_ttl = "720h"
 log_file = "/var/log/vault.log"
 log_rotate_duration = "24h"
 log_rotate_max_files = 30
-
-#storage "s3" { # s3-bucket
-#  region	 = "${region}" # s3-bucket
-#  bucket     = "${bucket-name}" # s3-bucket
-#} # s3-bucket
-
-#storage "dynamodb" {
-#    region          = "${region}" # dynamodb
-#    table           = "${dynamodb-table}" # dynamodb
-#    read_capacity   = 3 # dynamodb
-#    write_capacity  = 3 # dynamodb
-#}
-
-#seal "awskms" {
-#  region     = "${region}" # awskms
-#  kms_key_id = "${unseal-key}" # awskms
-# "arn:aws:kms:eu-central-1:482167452852:key/7a7c0692-7c64-463c-8319-e4adf66b7379"
-#} # awskms
-
-backend "file" {
-  path = "/opt/vault/data"
-}
 
 listener "tcp" {
 	address     = "0.0.0.0:8200"

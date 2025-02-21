@@ -27,6 +27,12 @@ source "amazon-ebs" "ubuntu" {
     most_recent = true
     owners      = ["099720109477"]
   }
+  vpc_filter  {
+    filters = {
+      "tag:Name": "k8s-vpc"
+    }
+  }
+
   ssh_username = "ubuntu"
   temporary_key_pair_type = "ed25519"
   associate_public_ip_address = true

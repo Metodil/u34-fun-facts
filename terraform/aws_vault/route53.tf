@@ -1,10 +1,6 @@
 
-resource "aws_route53_zone" "u34-vault" {
-  name = "u34-vault.link"
-}
-
-resource "aws_route53_record" "www" {
-  zone_id = aws_route53_zone.u34-vault.id
+resource "aws_route53_record" "vault" {
+  zone_id = data.aws_route53_zone.selected.id
   name    = "vault"
   type    = "A"
   ttl     = 300
