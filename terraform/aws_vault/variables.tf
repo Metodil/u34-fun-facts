@@ -87,6 +87,12 @@ variable "vault_fqdn" {
   default     = "vault.u34-vault.link"
 }
 
+variable "letsencrypt_mail" {
+  description = "Email for letsencrypt"
+  type        = string
+  default     = "metodil@hotmail.com"
+}
+
 variable "vault-root-token" {
   description = "Name of the secrets manager secret to save the vault root token to"
   default     = "vault-root-token"

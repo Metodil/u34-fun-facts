@@ -7,16 +7,16 @@ resource "aws_instance" "vault" {
     aws_security_group.ingress-ssh.id,
     aws_security_group.vpc-vault.id
   ]
-  key_name = var.instance_key_name
-
-  user_data = data.template_file.userdata.rendered
+  key_name             = var.instance_key_name
+  iam_instance_profile = aws_iam_instance_profile.vault-kms-unseal.name
+  user_data            = data.template_file.userdata.rendered
 
   tags = {
     Name = var.new_instance_name
   }
 
   # The vault instance needs the unseal key and dynamodb table in place before it launches.
-  depends_on = [aws_dynamodb_table.vault-table] # aws_kms_key.vault-unseal-key
+  depends_on = [aws_kms_key.vault-unseal-key, aws_dynamodb_table.vault-table]
 
 }
 

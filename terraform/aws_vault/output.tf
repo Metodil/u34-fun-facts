@@ -6,7 +6,7 @@ output "vault_server" {
 
 output "public_url" {
   description = "Public IRL for our Vault Server"
-  value       = "http://${aws_instance.vault.public_ip}:8200"
+  value       = "https://${var.vault_fqdn}:8200"
 }
 
 

@@ -12,6 +12,7 @@ data "template_file" "userdata" {
     secret_token_id      = aws_secretsmanager_secret.vault-root-token.id
     secret_unseal_id     = aws_secretsmanager_secret.vault-unseal-key.id
     vault_fqdn           = var.vault_fqdn
+    letsencript-mail     = var.letsencrypt_mail
   }
 }
 

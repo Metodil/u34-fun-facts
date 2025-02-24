@@ -70,7 +70,7 @@ data "aws_iam_policy_document" "vault-kms-unseal" {
   statement {
     sid       = "S3"
     effect    = "Allow"
-    resources = ["arn:aws:s3:::${var.bucket_name}/*"]
+    resources = ["arn:aws:s3:::${var.bucket_vault_name}/*"]
 
     actions = [
       "s3:GetObject"
