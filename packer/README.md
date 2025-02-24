@@ -47,22 +47,19 @@ Ansible Playbook Desired State Configuration: Install and setup Hashi Vault
 The following Ansible playbook automates the installation of Hashi Vault on an EC2 target instance.
 
 Playbook Tasks:
+
 > - name: Creating vault user group
 > - name: Creating vault user
 > - name: Install prerequisites
 > - name: Download binary
 > - name: Unzip vault archive
 > - name: Create storage
+> - name: Create tls folder
+> - name: Create log file
 > - name: Check if install was successful
 > - name: Copy systemd init file
 > - name: Copy config file
 > - name: Vault service start
-> - name: Pause for 30 seconds
-> - name: Vault init
-> - name: Vault init data
-> - name: Save vault data
-> - name: Vault unseal
-> - name: Vault status
-> - name: Vault status report
+
 
 This playbook ensures the installation and desired configuration of Hashi Vault.

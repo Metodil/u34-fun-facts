@@ -2,7 +2,7 @@
 A final project used for the following courses **Upskill 34 DevOps**  at **Telerik**:
 ## Project diagram
 
-![general setup](images/cicd-main.drawio.png)
+![general setup](images/cicd-main-01.drawio.png)
 
 ## Project description:
 > - All code is in Source control on GitHub.
