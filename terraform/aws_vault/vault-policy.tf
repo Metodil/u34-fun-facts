@@ -57,6 +57,8 @@ data "aws_iam_policy_document" "vault-kms-unseal" {
     actions = [
       "iam:GetInstanceProfile",
       "iam:GetRole",
+      "iam:CreateUser",
+      "iam:PutUserPolicy",
       "iam:CreateAccessKey",
       "iam:DeleteAccessKey",
       "iam:GetAccessKeyLastUsed",
