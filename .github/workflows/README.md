@@ -13,24 +13,33 @@
 ## Terraform workflow
 ### All structure are in AWS
 
-![general setup](../../images/tf-plan-wf.drawio.png)
+![general setup](../../images/tf-plan-apply-wf.jpg)
 
-![general setup](../../images/tr-apply-wf.drawio.png)
-
-
-### Common structure: Bucket and ...
-> - tf-common.yml  - Checks, creation plan and save to backend bucket
-> - tf-common-apply.yml  - Manual aprrove, copy plan from backend bucket and apply
+### Common structure: Bucket and  VPC ...
+> - tf-common.yml  - Checks, creates a plan and applying with Terraform
 
 ### EKS structure: Create PVC, EKS cluster ...
-> - tf-eks.yml  - Checks, creation plan and save to backend bucket
-> - tf-eks-apply.yml  - Manual aprrove, copy plan from backend bucket and apply
+> - tf-eks.yml  - Checks, creates a plan and applying with Terraform
 
 ### EKS add ons structure: Create  with helm ARGOCD, Observability Prometeus and Grafana ...
-> - tf-eks-add-ons.yml  - Checks, creation plan and save to backend bucket
-> - tf-eks-add-ons-apply.yml  - Manual aprrove, copy plan from backend bucket and apply
+> - tf-eks-add-ons.yml  - Checks, creates a plan and applying with Terraform
 
-### Hashi vault structure: Create from packer AMI EC2 instance with instaled Vault in separate VPC ...
-> - cicd-packer-vault.yml  - Checks, creation plan and save to backend bucket
-> - tf-vault-apply.yml  - Manual aprrove, copy plan from backend bucket and apply
-> - tf-vault-destroy.yml  - Manual aprrove, copy plan from backend bucket and destroy vault infrastructure
+### Hashi vault structure: Create from packer AMI EC2 instance with instaled Vault ...
+- cicd-packer-vault.yml
+  - Check for existing AMI if not found created with Hashi Paker
+  - Checks, creates a plan and applying with Terraform
+    - save tokens in AWS
+    - set Dynamodb for storage
+    - use AWS KMS for unsealing Vault
+    - use Let's Encript starting Vault with secure communication
+    - add EC2 instance IP address in AWS Route53 record
+
+![general setup](../../images/git-packer-vault-tf-aws.drawio.png).
+
+- [More details for Packer in packer/README](../../packer/README.md)
+- [More details for Terraform create EC2 in terraform/aws_vault/README](../../terraform/aws_vault/README.md)
+
+
+### EKS external secrets structure: Create secrets in EKS from Hashi vault ...
+> - tf-eks-external-secrets.yml
+    - Checks, creates a plan and applying with Terraform

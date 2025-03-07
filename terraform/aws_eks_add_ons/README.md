@@ -1,3 +1,17 @@
+## EKS Add ons :  ARGOCD + PROMETHEUS
+### terraform/aws_eks_add_ons list of files:
+> -  *main.tf*
+>    - installing ARGOCD with Help chart
+>    - installing PROMETHEUS + GRAFANA  with Help chart
+> -  *argocd_fun_facts-app*
+>    - Fun facts application manifest for ARGOCD to deploy in EKS "u34-dev" cluster
+> -  *output.tf*
+> -  *provider.tf*
+> -  *variables.tf*
+> -  *version.tf*
+>    - AWS backend for tfstate and locks
+
+
 <!-- BEGIN_TF_DOCS -->
 ## Requirements
 

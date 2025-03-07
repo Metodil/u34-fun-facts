@@ -1,33 +1,33 @@
 ## EC2 Instance with Hashi Vault for security management
 ### terraform/aws_vault list of files:
-> -  data.tf
+> -  *data.tf*
 >    - populate data in template/vault.sh.tpl
-> -  dynamodb.tf
+> -  *dynamodb.tf*
 >    - create dynamodb for storage
-> -  kms.tf
+> -  *kms.tf*
 >    - kms key that vault uses to unseal itself
-> -  main.tf
+> -  *main.tf*
 >    - create aws instance vault
 >    - generate tls_private_key for access in instance
 >    - create security groups
-> -  output.tf
-> -  provider.tf
-> -  route53.tf
+> -  *output.tf*
+> -  *provider.tf*
+> -  *route53.tf*
 >    - add aws route53 record for vault with instance IP
-> -  s3.tf
+> -  *s3.tf*
 >    - for storing configuration
-> -  secrets-manager.tf
+> -  *secrets-manager.tf*
 >    - create secret vault-root-token
 >    - create secret vault-unseal-key
-> -  vault-policy.tf
+> -  *vault-policy.tf*
 >    - policy for access to AWS resources
-> -  variables.tf
-> -  version.tf
+> -  *variables.tf*
+> -  *version.tf*
 >    - AWS backend for tfstate and locks
-> -  folder->templates
->    - vault-admin-policy.hcl
+> -  *folder->templates*
+>    - *vault-admin-policy.hcl*
 >      - give this instance admin privileges to vault
->    - vault.sh.tpl
+>    - *vault.sh.tpl*
 >      - bash script for configure Vault in desired state
 >        - set new vault config file
 >        - initialise vault and save root token and unseal key in AWS secrets manager

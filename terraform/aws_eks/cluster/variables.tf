@@ -22,15 +22,21 @@ variable "public_subnets" {
   default = "public_subnets"
 }
 
+variable "vpc_name" {
+  default     = "k8s-vpc"
+  description = "default value of vpc"
+}
+
+variable "vpc_subnet_name" {
+  default     = "k8s-vpc-public-eu-central-1a"
+  description = "default value of vpc subnet name"
+}
+
+
 variable "default_tags" {
   default = "u34_fp"
 }
 
 variable "eks_access_entries" {
   type = any
-}
-
-variable "vpc_name" {
-  default     = "k8s-vpc"
-  description = "default value of vpc"
 }
