@@ -1,3 +1,17 @@
+## Creating common infrastructure in AWS
+### terraform/aws_common list of files:
+> -  *aws-ddb.tf*
+>    - dynamodb_table for locking
+> -  *aws-s3-bucket.tf*
+>    - s3 bucket for keeping state
+> -  *provider.tf*
+> -  *vpc.tf*
+>    - AWS VPC for using in all infrastructure
+> -  *variables.tf*
+> -  *version.tf*
+>    - AWS backend for tfstate
+
+
 <!-- BEGIN_TF_DOCS -->
 
 ## Requirements

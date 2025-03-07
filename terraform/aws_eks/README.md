@@ -1,3 +1,21 @@
+## Creating EKS cluster in AWS
+### terraform/aws_eks list of files:
+> -  *main.tf*
+>    - using cluster module in folder cluster/
+>    - easy creating various type of cluster dev, staging and production with different parameters
+> -  *output.tf*
+> -  *provider.tf*
+> -  *variables.tf*
+> -  *version.tf*
+>    - AWS backend for tfstate and locks
+
+### terraform/aws_eks/cluster list of files:
+> -  *main.tf*
+>    - create EKS cluster with given parametes
+> -  *output.tf*
+> -  *variables.tf*
+
+
 <!-- BEGIN_TF_DOCS -->
 ## Requirements
 
