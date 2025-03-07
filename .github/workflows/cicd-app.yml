@@ -1,12 +1,16 @@
 name: CICD-App-pipeline
 run-name: u34 CICD-App-pipeline run on ${{ github.event_name }} event
 on:
-  push:
-    branches:
-      - 'main'
-    paths:
-      - 'app/**'
-      - '.github/workflows/cicd-app.yml'
+# Use it to not start. github sleeping mode :)
+  workflow_dispatch:
+
+# Uncomment below, used in dev/prod environment
+#  push:
+#    branches:
+#      - 'main'
+#    paths:
+#      - 'app/**'
+#      - '.github/workflows/cicd-app.yml'
 env:
   IMAGE_TAG: metodil/u34-fun-facts
   SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL_CICD_APP }}

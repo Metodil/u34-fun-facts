@@ -1,15 +1,15 @@
 name: CICD-TF-common
 run-name: u34 CICD-Terraform-common run on ${{ github.event_name }} event
 on:
-#  pull_request:
-#    types:
-#      - opened
-#      - closed
-  push:
+# Use it to not start. github sleeping mode :)
+  workflow_dispatch:
+
+# Uncomment below, used in dev/prod environment
+#  push:
 #    branches:
 #      - 'main'
-    paths:
-      - 'terraform/aws_common/**'
+#    paths:
+#      - 'terraform/aws_common/**'
 #      - '.github/workflows/tf-common.yml'
 #  schedule:
 #    - cron: '0 0 * * 1,4' # on Monday (1) and Thursday (4)
