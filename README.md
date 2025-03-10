@@ -35,9 +35,8 @@ Simple python app with 3 components.
 
 ## Continuous Integration (CI) and continuous delivery/deployment (CD)  Components
 ***
-The CICD workflow is defined in GitHub Actions.\
-It is triggered on PR to a trunk branch in the repository,
-ensuring that the codebase is continuously integrated and fully tested.
+> - The CICD workflow is defined in GitHub Actions.\
+> - It is triggered on push to MAIN branch in the repository, ensuring that the codebase is continuously integrated and fully tested.
 
 > - [More here in .github/workflows/README](.github/workflows/README.md) with details.
 
@@ -53,7 +52,7 @@ ensuring that the codebase is continuously integrated and fully tested.
 
 ## Future Improvements:
 > - TLS encryption on EKS with AWS Load Balancer Controller
-> - make prometues monitor the application itself
+> - make prometheus monitor the application itself
 > - make similar structure in Azure
 
 ## License:

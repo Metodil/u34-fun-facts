@@ -10,7 +10,7 @@
 #### [More here in aws_eks/README](aws_eks/README.md)
 ### Argocd and Observability infrastructure
 > - create Argocd whith Helm in EKS cluster
-> - create Prometeus and Grafana whith Helm in EKS cluster
+> - create Prometheus and Grafana whith Helm in EKS cluster
 #### [More here in aws_eks_add_ons/README](aws_eks_add_ons/README.md)
 ### Set external secrets in EKS from Hashi Vault infrastructure
 > - create External secrets in EKS Cluster from Hashi Vault infrastructure
