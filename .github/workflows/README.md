@@ -1,6 +1,6 @@
 ## Workflows structure
 
-## Applycation workflow
+## Aplication workflow
 
 ![general setup](../../images/app-workflow-sdlc.jpg)
 
