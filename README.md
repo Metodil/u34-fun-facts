@@ -52,10 +52,9 @@ ensuring that the codebase is continuously integrated and fully tested.
 > - [More here in hashi_vault_doc/README](hashi_vault_doc/README.md) with details.
 
 ## Future Improvements:
-> - Add Route53 DNS Records and SSL/TLS for Hashi Vault and Kubernetes Load Balancer
-> - Implement ChatOps with Slack
-> - Improve Hashi Vault with Auto Unseal and DynamoDB Backend
-> - Reducing the number of VPCs, merging EKS with the Vault instance in one VPC.
+> - TLS encryption on EKS with AWS Load Balancer Controller
+> - make prometues monitor the application itself
+> - make similar structure in Azure
 
 ## License:
 ### Terms of Use
