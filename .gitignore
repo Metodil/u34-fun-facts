@@ -1,6 +1,9 @@
 # environment vars
 env-vars.sh
 kubernetes/app-secrets.yaml
+# not track init files
+aws-ddb.init
+aws-s3-bucket.init
 
 # Remove public keys
 *.pem
